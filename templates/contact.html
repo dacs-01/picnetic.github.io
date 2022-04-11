@@ -2,6 +2,26 @@
 
 {% block title %}Picnetic | Contact Us{% endblock %}
 
+
+
 {% block body %}
+<form method="POST" action="{{ url_for('contact') }}" style = "margin-top: 5%;"> 
+  <ul style = "text-align: center; list-style: none;">
+  <div style = "font-size: 25px; text-align:  center; margin-top: 100px;" class="form-group">
+    <li><label for="userText">Description of Issues You've Experienced</label></li>
+ </div>  
+ <div style = "margin-left: 38%">
+
+
+  {{ form.csrf_token }}
+<li> {{ form.Issue }}</li>
+</div>
+<div style = "display: inline-block">
+<li style = "margin-bottom: 25px;">  {{ form.recaptcha }}</li>
+    </div>
+     <div style = "text-align: center">
+    <li> <button style = "background-color: #005035;" type="submit" class="btn btn-primary">Submit</button></li>
+    </ul>
+</form>
 
 {% endblock %}
