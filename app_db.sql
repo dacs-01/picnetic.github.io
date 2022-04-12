@@ -13,9 +13,11 @@ create table if not exists users (
 
 create table if not exists friend (
 	user_id int not null,
+    friend_id int not null,
     pending bool,
-    primary key (user_id),
-    foreign key (user_id) references users (user_id)
+    primary key (user_id, friend_id),
+    foreign key (user_id) references users (user_id),
+    foreign key (friend_id) references users (user_id)
 );
 
 create table if not exists comments (
@@ -39,10 +41,12 @@ create table if not exists post (
 );
 
 create table if not exists contact (
+	contact_id int not null, 
 	user_id int not null,
     date datetime,
     email varchar(45) not null,
-    description varchar(255) null,
-    primary key (user_id)
+    description varchar(255) default null,
+    primary key (contact_id),
+    foreign key (user_id) references users (user_id)
 ); 
 
