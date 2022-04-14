@@ -13,8 +13,8 @@ from flask import Flask, redirect, render_template, request, abort, url_for
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
+from src.models import db
 #------------------------------------------------------------------------------------------------------------------------------------------
-
 
 app = Flask(__name__)
 
@@ -43,8 +43,21 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 #------------------------------------------------------------------------------------------------------------------------------------------
 
+#This is the dotenv connection string for our database
+load_dotenv()
 
+db_host = os.getenv('DB_HOST', 'localhost')
+db_port = os.getenv('BD_PORT', '3306')
+db_user = os.getenv('DB_USER', 'root')
+db_pass = os.getenv('DB_PASSWORD')
+db_name = os.getenv('DB_NAME', 'picnetic_db')
 
+connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 @app.route('/', methods=['GET', 'POST']) 
 def contact(): 
