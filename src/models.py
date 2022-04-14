@@ -23,7 +23,7 @@ class Users(db.Model):
     comments = db.relationship('Comments', backref='users', lazy=True)
     posts = db.relationship('Post', backref='users', lazy=True)
     contact = db.relationship('Contact', backref='users', lazy=True)
-    tags = db.relationship('friend', secondary=friends, lazy='subquery', backref=db.backref('friend', lazy=True))
+    friends = db.relationship('friend', secondary=friends, lazy='subquery', backref=db.backref('friend', lazy=True))
 
 class Friend(db.Model):
     __tablename__ = 'friend'
