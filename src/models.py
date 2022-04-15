@@ -1,14 +1,16 @@
+import enum
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Enum, ForeignKeyConstraint, func
 db = SQLAlchemy()
+
 
 #I used these websties to help me with all of the foreign keys/relationships:
 # https://docs.sqlalchemy.org/en/14/orm/basic_relationships.html
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
 
 #This is to represent the many to many relationship between users and friend (must be made before each entity table)
-friends = db.Table('friend',
+friends = db.Table('friends',
     db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
     db.Column('friend_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
 )
@@ -28,7 +30,7 @@ class Users(db.Model):
 class Friend(db.Model):
     __tablename__ = 'friend'
     user_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    friend_id = db.Column(db.Interger, primary_key=True, nullable=False)
+    friend_id = db.Column(db.Integer, primary_key=True, nullable=False)
     pending = db.Column(db.Boolean, nullable=False)
     #Need to add foreign key for user_id and friend_id to both reference user_id
 
@@ -43,7 +45,7 @@ class Comments(db.Model):
 #I used this website to help me create this enum:
 #https://stackoverflow.com/questions/2676133/best-way-to-do-enum-in-sqlalchemy
 #This is for the post_label that we allow users to select when creating a post
-class post_enum(Enum.Enum):
+class post_enum(enum.Enum):
     campus = 'campus'
     sports = 'sports'
     stuorg = 'student org'
