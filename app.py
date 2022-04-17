@@ -59,7 +59,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-@app.route('/', methods=['GET', 'POST']) 
+@app.route('/', methods =['GET'])
+def index():
+    return render_template("index.html")
+
+@app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
 
     #form object, will be used for validation and inserting parts into the html
