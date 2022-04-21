@@ -79,8 +79,8 @@ def contact():
     
     return render_template("contact.html", form=form)
 
-@app.route('/signup', methods=['GET', 'POST']) 
-def SigtnUp(): 
+@app.route('/sign-up', methods=['GET', 'POST']) 
+def SignUp(): 
     message = ""
     if request.method == 'POST':
         #will have to connect this to the database when I have the file
@@ -104,6 +104,11 @@ def SigtnUp():
     #TODO use the hased password, email, and username to create a new user. Can be done when we have a models file.
     #
     return render_template("create_account.html")
+
+@app.route('/new-post', methods=['GET', 'POST'])
+def CreatePost(): 
+    
+    return render_template("create_post.html")
 
 
 if __name__ == '__main__':
