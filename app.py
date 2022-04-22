@@ -8,12 +8,12 @@
  #           |_|     
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, abort, url_for
+from flask import Flask, redirect, render_template, request, abort, url_for, session
 #imports for the recaptcha
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
-from src.models import db
+from src.models import db, Users
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
@@ -36,12 +36,14 @@ bcrypt = Bcrypt(app)
 #it might take a few days for you to get the recaptcha information in the analytics center. 
 RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_SITE_KEY")
 RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_SECRET_KEY")
+APP_SECRET = os.environ.get("APP_SECRET")
 
 #the secret key for the flask site. Makes sure sessions are protected. I generated a random key using os.urandom()
-app.config['SECRET_KEY'] = os.urandom(15)
+app.config['SECRET_KEY'] = APP_SECRET
 app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 #------------------------------------------------------------------------------------------------------------------------------------------
+
 
 #This is the dotenv connection string for our database
 load_dotenv()
@@ -59,14 +61,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
-@app.route('/', methods =['GET'])
-def index():
-    return render_template("index.html")
+#@app.route('/', methods =['GET'])
+#def index():
+#    return render_template("index.html")
 
 @app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
 
-    #form object, will be used for validation and inserting parts into the html
+    #form object, will be used for valida  tion and inserting parts into the html
     form = captchaForm(request.form)
     
     #check for a post request and see if the form is submitted and vailidated. (the last 2 are checked on validate_on_submit)
@@ -81,35 +83,76 @@ def contact():
 
 @app.route('/sign-up', methods=['GET', 'POST']) 
 def SignUp(): 
+
     message = ""
+    username =" "
+    password = ""
+    confirmPass = ""
+    email = ""
     if request.method == 'POST':
         #will have to connect this to the database when I have the file
-        userName = request.form.get('userName')
-        password = request.form.get('password')
-        confirmPass = request.form.get('confirmPass')
-        email = request.form.get('emailAddress')
+        userName = request.form.get('userName', '')
+        password = request.form.get('password', '')
+        confirmPass = request.form.get('confirmPass', '')
+        email = request.form.get('emailAddress', '')
         
         #if they leave a part blank then give the error
         if userName == '' or password == '' or confirmPass == '' or email == '':
             abort(400)
-
+        if "@" not in email:
+            abort(400)
         #if the 2 passwords they gave do not match give error
         if(password != confirmPass):
             abort(400)
 
         #if everything works, hash the password so it can be saved in the database
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        hashedPassword = bcrypt.generate_password_hash(password).decode('utf-8')
             
+        #create a user and add them to the database and commit the add. 
+        newUser = Users(user_name = userName, passed = hashedPassword, email = email)
+        db.session.add(newUser)
+        db.session.commit()
 
-    #TODO use the hased password, email, and username to create a new user. Can be done when we have a models file.
-    #
     return render_template("create_account.html")
+
+
+#route for login
+@app.route('/login', methods=['GET','POST']) 
+def login():
+    
+    
+    if request.method == 'POST':
+        #get the information that the user input
+        userName = request.form.get('userName')
+        password = request.form.get('password')
+
+
+        #input validation for the username and password for signin
+        if userName == '' or password == '':
+            abort(400)
+        #make a user object with the user that was logged in
+        user = Users.query.filter_by( user_name =userName).first()
+
+        # if the user does not exist then cause error
+        if not user or user.user_id == 0:
+            return abort(400)
+        # if the password does not match the one inputted then cause error
+        if not bcrypt.check_password_hash(user.passed, password):
+            return abort(400)
+        
+        #create the session for the user
+        session['user'] = {
+            'user_name': userName,
+            'user_id': user.user_id
+            }
+        #this line will have to change when the home page is made because this is just validating the user is in the session. 
+        return render_template("index.html", us = session['user']['user_name'])
+    return render_template("login.html")
 
 @app.route('/new-post', methods=['GET', 'POST'])
 def CreatePost(): 
     
     return render_template("create_post.html")
-
 
 if __name__ == '__main__':
     app.run()

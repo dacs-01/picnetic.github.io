@@ -2,6 +2,8 @@ import enum
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey, Enum, ForeignKeyConstraint, func
+#longtext found from this link https://stackoverflow.com/questions/61684135/how-to-represent-longtext-in-sqlalchemy
+from sqlalchemy.dialects.mysql import LONGTEXT
 db = SQLAlchemy()
 
 
@@ -10,22 +12,24 @@ db = SQLAlchemy()
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
 
 #This is to represent the many to many relationship between users and friend (must be made before each entity table)
-friends = db.Table('friends',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
-    db.Column('friend_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
-)
+#friends = db.Table('friends',
+#    db.Column('user_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True),
+#    db.Column('friend_id', db.Integer, db.ForeignKey('users.user_id'), primary_key=True)
+#)
 
 #This is the begining of each entity in our database
 class Users(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(45), nullable=False)
-    f_name = db.Column(db.String(45), nullable=False)
-    l_name = db.Column(db.Integer, nullable=False)
+    user_name = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    passed = db.Column(LONGTEXT, nullable=False)
+    f_name = db.Column(db.String(255), nullable= True)
+    l_name = db.Column(db.Integer, nullable= True)
     comments = db.relationship('Comments', backref='users', lazy=True)
     posts = db.relationship('Post', backref='users', lazy=True)
     contact = db.relationship('Contact', backref='users', lazy=True)
-    friends = db.relationship('friend', secondary=friends, lazy='subquery', backref=db.backref('friend', lazy=True))
+    #friends = db.relationship('friend', secondary=friends, lazy='subquery', backref=db.backref('friend', lazy=True))
 
 class Friend(db.Model):
     __tablename__ = 'friend'
