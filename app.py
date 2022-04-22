@@ -64,7 +64,7 @@ db.init_app(app)
 @app.route('/', methods=['GET', 'POST']) 
 def contact(): 
 
-    #form object, will be used for validation and inserting parts into the html
+    #form object, will be used for valida  tion and inserting parts into the html
     form = captchaForm(request.form)
     
     #check for a post request and see if the form is submitted and vailidated. (the last 2 are checked on validate_on_submit)
