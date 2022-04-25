@@ -110,6 +110,5 @@ def CreatePost():
     
     return render_template("create_post.html")
 
-
 if __name__ == '__main__':
     app.run()
