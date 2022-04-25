@@ -105,6 +105,10 @@ def SignUp():
     #
     return render_template("create_account.html")
 
+@app.route('/settings', methods=['GET','POST'])
+def settings():
+    return render_template("settings.html")
+
 @app.route('/new-post', methods=['GET', 'POST'])
 def CreatePost(): 
     
