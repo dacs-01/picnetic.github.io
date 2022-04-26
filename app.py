@@ -149,6 +149,20 @@ def login():
         return render_template("index.html", us = session['user']['user_name'])
     return render_template("login.html")
 
+@app.route('/account', methods =['GET'])
+def userAccount(username):
+    #check for username in our Users table
+    userAccount = Users.query.filter_by(username=Users.user_name).first()
+    if userAccount is None: #if user is not found
+        return redirect(url_for('sign-in')) #redirect them to the sign in page
+    else:
+        #grab their comment and post history
+        comment_his = Users.query.get(Users.userAccount.comments)
+        post_his = Users.query.get(Users.userAccount.posts)
+        #TODOadd checks for if user clicks (account settings), render settings page
+    return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+
+
 @app.route('/new-post', methods=['GET', 'POST'])
 def CreatePost(): 
     
