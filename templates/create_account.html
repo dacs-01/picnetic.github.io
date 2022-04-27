@@ -3,41 +3,43 @@
 {% block title %}Picnetic | Sign Up{% endblock %}
 
 {% block body %}
+<style>
+    form{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 15%;
+
+    }
+    input{
+        width: 300px; 
+        margin-bottom: 10px; 
+    }
+    label{
+        font-size: 25px;  
+        margin-top: 10px;
+        margin-bottom: 5px
+    }
+</style>
+<div>
 <form method = "POST">
-    <div>
-    <ul style = " list-style: none; text-align: left; margin-left: auto; margin-right: auto; width: 50%; ">
+    
+        <label for="emailAddress">Email Address</label><br>
+        <input type = "text"  name = "emailAddress" id = "emailAddress" autocomplete = "off" ><br>
+        <label for="userName">User Name</label><br>
+        <input type = "text" name = "userName" id = "userName" autocomplete = "off" ><br>
 
-        <div style = "font-size: 25px;  margin-top: 100px;" class="form-group">
-            <li><label for="emailAddress">Email Address</label></li>
-        </div>  
-        <li >
-            <input type = "text" style = "width: 60%; margin-top: 10px;" name = "emailAddress" id = "emailAddress" autocomplete = "off" >
-        </li>
+        <label for="password">Password</label><br>
+        
+        <input type = "password"  name = "password" id = "password" autocomplete = "off" ><br>
 
-        <div style = "font-size: 25px;  margin-top: 50px;" class="form-group">
-            <li><label for="userName">User Name</label></li>
-        </div>  
-        <li >
-            <input type = "text" style = "width: 60%; margin-top: 10px;"name = "userName" id = "userName" autocomplete = "off" >
-        </li>
+        
+        <label for="confirmPass">Confirm Password</label><br>
+       
+            <input type = "password" name = "confirmPass" id = "confirmPass" autocomplete = "off" ><br>
+        
+        <input  type="submit" value = "Create Account" style = "background-color: #005035; color:white; height: 50px; font-weight: bold;  "><br>
 
-        <div style = "font-size: 25px;  margin-top: 50px;" class="form-group">
-            <li><label for="password">Password</label></li>
-        </div>  
-        <li >
-            <input type = "password" style = "width: 60%; margin-top: 10px; " name = "password" id = "password" autocomplete = "off" >
-        </li>
-
-        <div style = "font-size: 25px;  margin-top: 50px; border-color: #005035;" class="form-group">
-            <li><label for="confirmPass">Confirm Password</label></li>
-        </div>  
-        <li >
-            <input type = "password" style = "width: 60%; margin-top: 10px;" name = "confirmPass" id = "confirmPass" autocomplete = "off" >
-        </li>
-        <input type="submit" value = "Create Account" style = "padding: 5px; font-weight: 500; margin-top: 20px; width:60%; background-color: #005035; color:white;">
-
-    </ul>
-
-</div>
 </form>
+</div>
 {% endblock %}

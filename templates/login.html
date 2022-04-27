@@ -3,5 +3,35 @@
 {% block title %}Picnetic | Sign in{% endblock %}
 
 {% block body %}
+<style>
+    form{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 15%;
 
+    }
+    input{
+        width: 300px; 
+        margin-bottom: 10px; 
+    }
+    label{
+        font-size: 25px;  
+        margin-top: 10px;
+        margin-bottom: 5px
+    }
+</style>
+<div>
+<form method = "POST" >
+
+    <label style = "font-size: 25px;  margin-top: 100px;" for="username">User Name</label><br>
+    <input type = "text"  name = "userName" id = "userName" autocomplete = "off" ><br>
+
+    <label style = "font-size: 25px;" for="password">Password</label><br>
+    <input type = "text" name = "password" id = "password" autocomplete = "off" ><br>
+
+    <input type="submit" value = "Create Account" style = "background-color: #005035; color:white; height: 50px; font-weight: bold; ">
+
+</form>
+</div>
 {% endblock %}

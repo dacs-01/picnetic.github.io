@@ -3,10 +3,12 @@ CREATE DATABASE IF NOT EXISTS picnetic_db;
 use picnetic_db;
 
 create table if not exists users (
-	user_id int not null,
-    user_name varchar(45) not null,
-    f_name varchar(45) not null,
-    l_name varchar(45) not null,
+	user_id int not null auto_increment,
+    user_name varchar(255) not null,
+    email varchar(255) not null,
+    f_name varchar(255) ,
+    l_name varchar(255) ,
+    passed longtext not null,
     primary key (user_id),
     unique (user_name)
 );
