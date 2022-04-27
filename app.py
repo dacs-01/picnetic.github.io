@@ -117,7 +117,7 @@ def SignUp():
 
 
 #route for login
-@app.route('/login', methods=['GET','POST']) 
+@app.route('/sign-in', methods=['GET','POST']) 
 def login():
     
     
