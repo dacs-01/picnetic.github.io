@@ -115,6 +115,9 @@ def SignUp():
 
     return render_template("create_account.html")
 
+@app.route('/settings', methods=['GET','POST'])
+def settings():
+    return render_template("settings.html")
 
 #route for login
 @app.route('/sign-in', methods=['GET','POST']) 
@@ -161,7 +164,6 @@ def userAccount(username):
         post_his = Users.query.get(Users.userAccount.posts)
         #TODOadd checks for if user clicks (account settings), render settings page
     return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
-
 
 @app.route('/new-post', methods=['GET', 'POST'])
 def CreatePost(): 
