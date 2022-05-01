@@ -117,7 +117,7 @@ def SignUp():
 
 
 #route for login
-@app.route('/login', methods=['GET','POST']) 
+@app.route('/sign-in', methods=['GET','POST']) 
 def login():
     
     
@@ -149,7 +149,7 @@ def login():
         return render_template("index.html", us = session['user']['user_name'])
     return render_template("login.html")
 
-@app.route('/account', methods =['GET'])
+@app.route('/account/<username>', methods =['GET'])
 def userAccount(username):
     #check for username in our Users table
     userAccount = Users.query.filter_by(username=Users.user_name).first()
@@ -159,8 +159,7 @@ def userAccount(username):
         #grab their comment and post history
         comment_his = Users.query.get(Users.userAccount.comments)
         post_his = Users.query.get(Users.userAccount.posts)
-        #TODOadd checks for if user clicks (account settings), render settings page
-    return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+    return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 
 
 @app.route('/new-post', methods=['GET', 'POST'])

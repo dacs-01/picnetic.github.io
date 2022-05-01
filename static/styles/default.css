@@ -2,14 +2,14 @@ body {
     margin: 0;
     font-family: Oswald;
 }
-  
+
 .header_light {
     overflow: hidden;
     background-color: white;
     margin-left: 300px;
     margin-right: 300px;
 }
-  
+
 .header_light a {
     float: right;
     color: #005035;
@@ -19,7 +19,7 @@ body {
     text-shadow: 2px 6px 4px #33333360;
     font-size: 34px;
 }
-  
+
 .header_light a:hover {
     background-color: #817032;
     color: white;
@@ -31,7 +31,7 @@ body {
     margin-left: 300px;
     margin-right: 300px;
 }
-  
+
 .header_dark a {
     float: right;
     color: #837236;
@@ -41,7 +41,7 @@ body {
     text-shadow: 2px 6px 4px #233a30;
     font-size: 34px;
 }
-  
+
 .header_dark a:hover {
     background-color: #817032;
     color: white;
@@ -53,7 +53,7 @@ body {
     margin-left: 450px;
     margin-right: 450px;
 }
-  
+
 .footer_light a {
     float: left;
     color: #005035;
@@ -69,7 +69,7 @@ body {
     margin-left: 450px;
     margin-right: 450px;
 }
-  
+
 .footer_dark a {
     float: left;
     color: #837236;
@@ -88,24 +88,36 @@ body {
     float: right;
 }
 
-table, th, td {
+table,
+th,
+td {
     width: 100%;
-    
+
 }
 
-.body_dark{
+.body_dark {
     background-color: black;
     color: white;
 }
 
-.body_light{
+.body_light {
     background-color: white;
     color: black
 }
 
 .button_light {
     background-color: #233a30;
-    border:#837236;
-    border-style: inset; 
+    border: #837236;
+    border-style: inset;
     color: white;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}
+
+.table-wrapper-scroll-y {
+    display: block;
 }
