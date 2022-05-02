@@ -173,10 +173,13 @@ def CreatePost():
 
 @app.get('/friends')
 def search_users():
+    #creates empty array to store users
     found_users = []
     q = request.args.get('q', '')
+    #if the query is not empty searches the db for the user 
     if q != '':
         found_users = users_repository_singleton.search_users(q)
+    #return a template with the list of users found
     return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
