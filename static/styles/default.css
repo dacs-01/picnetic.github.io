@@ -4,6 +4,7 @@ body {
 }
 
 
+  
 header {
     overflow: hidden;
     background-color: white;
@@ -12,6 +13,7 @@ header {
 }
 
 
+  
 header a {
     float: right;
     color: #005035;
@@ -24,6 +26,7 @@ header a {
 
 
 
+  
 header a:hover {
     background-color: #817032;
     color: white;
@@ -52,6 +55,7 @@ footer {
 
 
 
+  
 footer a {
     float: left;
     color: #005035;
@@ -91,6 +95,22 @@ body{
 }
 
 .body_dark {
+    background-color: black;
+    color: white;
+}
+
+.mode {
+    float:right;
+}
+
+
+
+body{
+    background-color: white;
+    color: black
+}
+
+.body_dark{
     background-color: black;
     color: white;
 }
