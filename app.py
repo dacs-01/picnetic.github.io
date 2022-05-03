@@ -13,20 +13,11 @@ from flask import Flask, redirect, render_template, request, abort, url_for, ses
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
-<<<<<<< Updated upstream
-
-from src.models import db, Users, Comments
+from src.models import db, Users, Comments, Post
 import base64
-
 import io
-
-from src.repositories.users_repository import users_repository_singleton
-
-=======
-from src.models import db, Users, Post
 from src.repositories.users_repository import users_repository_singleton
 from werkzeug.utils import secure_filename
->>>>>>> Stashed changes
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 UPLOAD_FOLDER = '/path/to/the/uploads'
