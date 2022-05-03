@@ -8,13 +8,19 @@
  #           |_|     
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, abort, url_for, session
+from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for
 #imports for the recaptcha
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
-from src.models import db, Users
+
+from src.models import db, Users, Comments
+import base64
+
+import io
+
 from src.repositories.users_repository import users_repository_singleton
+
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 app = Flask(__name__)
@@ -60,11 +66,36 @@ connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 db.init_app(app)
+picFolder = os.path.join('static', 'images')
+app.config['UPLOAD_FOLDER'] = picFolder
 
 @app.route('/', methods =['GET'])
 def index():
-    return render_template("index.html")
+
+    #check if the user is in the session
+    if 'user' in session:
+        #FAKE INFORMATION FOR TESTING -----------------------------------------
+        bio = "HI"
+        photo = "static/images/sportsphoto1.jpg"
+        imgType = "sports"
+        #------------------------------------------
+        #if the user makes a post request 
+        if request.method == 'POST':
+            #get the comment
+            comment = request.form.get("comment", '')
+            #check if the comment is real
+            if comment != '':
+                #PUT A POST ID HERE
+                #if it is real then create the comment and add it to the DB
+                #BLOEKC HERE BLOCKED HERE
+                #BLOCKED HERE
+                #BLOCKED HERE
+                newComment = Comments(session['user']['user_id'], comment, )
+
+        return render_template("index.html", photo = photo, bio = bio, imgType = imgType, us = session['user']['user_name'])
+    return render_template('index.html')
 
 @app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
@@ -150,7 +181,7 @@ def login():
             'user_id': user.user_id
             }
         #this line will have to change when the home page is made because this is just validating the user is in the session. 
-        return render_template("index.html", us = session['user']['user_name'])
+        return redirect("/")
     return render_template("login.html")
 
 @app.route('/account', methods =['GET'])
