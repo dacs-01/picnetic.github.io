@@ -1,0 +1,60 @@
+{% extends '_layout.html' %}
+
+{% block title %}Picnetic | Account{% endblock %}
+
+{% block body %}
+<div class="container">
+    <!--header and edit-->
+    <div class="row">
+        <div class="col-sm">
+            <h2> User Account</h2> <a href="/settings"><button type="button" class="btn btn-secondary float-right">Edit Account</button></a>
+            <h3> {{ userAccount.user_name }}</h3>
+        </div>
+    </div>
+
+    <!--comment history-->
+    <div class="row">
+        <div class="col-sm">
+            <h2>Comment History</h2>
+
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                <table class="table table-bordered table-striped mb-0">
+                    <tbody>
+                        <tr>
+                            {{ for comments in comment_his }}
+                            <td>{{ comments }}</td>
+                            {{ endfor }}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!--post history-->
+    <div class="row">
+        <div class="col-sm">
+
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                <h2>Post History</h2>
+
+                <table class="table table-bordered table-striped mb-0">
+                    <tbody>
+                        <tr>
+                            {{ for posts in post_his }}
+                            <td>{{ posts }}</td>
+                            {{ endfor }}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -185,18 +185,17 @@ def login():
         return redirect("/")
     return render_template("login.html")
 
-@app.route('/account', methods =['GET'])
-def userAccount(username):
+@app.route('/account/<int:user_id>', methods =['GET'])
+def userAccount(user_id):
     #check for username in our Users table
-    userAccount = Users.query.filter_by(username=Users.user_name).first()
+    userAccount = Users.query.filter_by(user_id=Users.user_id).first()
     if userAccount is None: #if user is not found
         return redirect(url_for('sign-in')) #redirect them to the sign in page
     else:
         #grab their comment and post history
         comment_his = Users.query.get(Users.userAccount.comments)
         post_his = Users.query.get(Users.userAccount.posts)
-        #TODOadd checks for if user clicks (account settings), render settings page
-    return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+    return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 
 @app.route('/new-post', methods=['POST', 'GET'])
 def CreatePost(): 
