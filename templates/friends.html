@@ -3,20 +3,45 @@
 {% block title %}Picnetic | Friends{% endblock %}
 
 {% block body %}
+<style>
+  form, h1, p {
+    display: block;
+    margin-left: 23.4375%;
+    margin-right: 23.4375%;
+  }
+  .table{
+    margin-left: 23.4375%;
+    width: 53%;
+    display: block;
+  }
+  input{
+    width: 75%; 
+    margin-bottom: 10px; 
+  }
+  td, th{
+    width: 400px;
+  }
+  label{
+    font-size: 25px;  
+    margin-top: 10px;
+    margin-bottom: 5px
+  }
+</style>
+
 <h1 class="mb-5">Search Users</h1>
 <form action="/friends" method="get" class="mb-5">
   <label for="q" class="form-label">Search by Username</label>  
   <div class="input-group">
     <input type="text" name="q" id="q" class="form-control">
     <div class="input-group-append">
-      <button type="submit" class="btn btn-primary">Search</button>
+      <button type="submit" style = "background-color: #005035; color:white; height: 80%; ">Search</button>
     </div>
   </div>
 </form>
 <!-- If q is passed to the template, we did a search already -->
 {% if q != '' %}
 {% if userlist|length != 0 %}
-<table class="table">
+<table class="table table-dark" style="border-color: white; border-style: solid;">
   <thead>
     <tr>
       <th>User Name</th>
@@ -27,7 +52,7 @@
   <tbody>
     {% for users in userlist %}
       <tr>
-        <td><a href="/friends/{{ users.user_name }}">{{ users.user_name }}</a></td>
+        <td><a href="/account/{{ users.user_name }}" style="text-decoration: none;color: white;">{{ users.user_name }}</a></td>
         <td>{{ users.f_name }}</td>
         <td>{{ users.l_name }}</td>
       </tr>

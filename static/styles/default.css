@@ -8,8 +8,8 @@ body {
 header {
     overflow: hidden;
     background-color: white;
-    margin-left: 300px;
-    margin-right: 300px;
+    margin-left: 15.625%;
+    margin-right: 15.625%;
 }
 
 
@@ -49,8 +49,8 @@ header a:hover {
 footer {
     overflow: hidden;
     background-color: white;
-    margin-left: 450px;
-    margin-right: 450px;
+    margin-left: 23.4375%;
+    margin-right: 23.4375%;
 }
 
 
