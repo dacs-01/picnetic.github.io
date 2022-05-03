@@ -13,10 +13,13 @@ from flask import Flask, redirect, render_template, request, abort, url_for, ses
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
+
 from src.models import db, Users, Comments
 import base64
 
 import io
+
+from src.repositories.users_repository import users_repository_singleton
 
 #------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -53,7 +56,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 load_dotenv()
 
 db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('BD_PORT', '3306')
+db_port = os.getenv('DB_PORT', '3306')
 db_user = os.getenv('DB_USER', 'root')
 db_pass = os.getenv('DB_PASSWORD')
 db_name = os.getenv('DB_NAME', 'picnetic_db')
@@ -198,6 +201,14 @@ def userAccount(username):
 def CreatePost(): 
     
     return render_template("create_post.html")
+
+@app.get('/friends')
+def search_users():
+    found_users = []
+    q = request.args.get('q', '')
+    if q != '':
+        found_users = users_repository_singleton.search_users(q)
+    return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
     app.run()
