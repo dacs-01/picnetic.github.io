@@ -195,7 +195,7 @@ def userAccount(user_id):
         #grab their comment and post history
         comment_his = Users.query.get(Users.userAccount.comments)
         post_his = Users.query.get(Users.userAccount.posts)
-    return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+    return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 
 @app.route('/new-post', methods=['POST', 'GET'])
 def CreatePost(): 
