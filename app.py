@@ -13,6 +13,7 @@ from flask import Flask, redirect, render_template, request, abort, url_for, ses
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
+<<<<<<< Updated upstream
 
 from src.models import db, Users, Comments
 import base64
@@ -21,9 +22,18 @@ import io
 
 from src.repositories.users_repository import users_repository_singleton
 
+=======
+from src.models import db, Users, Post
+from src.repositories.users_repository import users_repository_singleton
+from werkzeug.utils import secure_filename
+>>>>>>> Stashed changes
 #------------------------------------------------------------------------------------------------------------------------------------------
 
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 bcrypt = Bcrypt(app)
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -197,9 +207,28 @@ def userAccount(username):
         #TODOadd checks for if user clicks (account settings), render settings page
     return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 
-@app.route('/new-post', methods=['GET', 'POST'])
+@app.route('/new-post', methods=['POST', 'GET'])
 def CreatePost(): 
-    
+    if request.method == 'POST':
+        formFile = request.files['formFile']
+
+        #if not formFile:
+        #    return 'No Image Uploaded', 400
+        
+        filename = secure_filename(formFile.filename)
+        formFile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        #user_name = From session
+        label = request.form.get('post-label')
+        cap = request.form.get('caption')
+
+        post = Post(post_label=label, post_cap=cap, post_picture=formFile.read(), picture_file_name=filename) #Add Username
+        db.session.add(post)
+        db.session.commit()
+        
+        print(post)
+
+
     return render_template("create_post.html")
 
 @app.get('/friends')
