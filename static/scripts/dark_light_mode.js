@@ -1,11 +1,9 @@
 $(document).ready(function() {
-    //Checks on page load if it should be dark mode
     if (sessionStorage.getItem("isDarkMode") == 1){
         $( "header" ).addClass( "header_dark" );
         $( "body" ).addClass( "body_dark" );
         $( "footer" ).addClass( "footer_dark" );
     }
-    //Method to change to dark mode
     $( ".change" ).on("click", function() {
         if( sessionStorage.getItem("isDarkMode") == 1) {
             $( "header" ).removeClass( "header_dark" )
