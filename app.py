@@ -149,10 +149,10 @@ def login():
         return render_template("index.html", us = session['user']['user_name'])
     return render_template("login.html")
 
-@app.route('/account/<username>', methods =['GET'])
-def userAccount(username):
+@app.route('/account/<int:user_id>', methods =['GET'])
+def userAccount(user_id):
     #check for username in our Users table
-    userAccount = Users.query.filter_by(username=Users.user_name).first()
+    userAccount = Users.query.filter_by(user_id=Users.user_id).first()
     if userAccount is None: #if user is not found
         return redirect(url_for('sign-in')) #redirect them to the sign in page
     else:
