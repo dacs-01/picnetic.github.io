@@ -22,24 +22,25 @@ create table if not exists friend (
     foreign key (friend_id) references users (user_id)
 );
 
-create table if not exists comments (
-	com_thread_id int not null,
-    user_id int not null,
-    comment varchar(255),
-    primary key(com_thread_id),
-    foreign key (user_id) references users (user_id)
-);
-
 create table if not exists post (
 	user_name varchar(45) not null,
     post_id int not null,
     post_label enum('campus','sports',
     'stuorg','norm','alums','meme'),
-    post_cap varchar(255) null,
-    com_thread_id int not null,
+    post_cap varchar(255) default null,
+    post_picture varchar(255) not null,
     primary key (post_id),
-    foreign key (com_thread_id) references comments (com_thread_id),
     foreign key (user_name) references users (user_name)
+);
+
+create table if not exists comments (
+    comment_id int not null,
+    user_id int not null,
+    comment varchar(255),
+    post_id int not null,
+    primary key(comment_id),
+    foreign key (user_id) references users (user_id),
+    foreign key (post_id) references post (post_id)
 );
 
 create table if not exists contact (
@@ -51,4 +52,3 @@ create table if not exists contact (
     primary key (contact_id),
     foreign key (user_id) references users (user_id)
 ); 
-

@@ -8,15 +8,23 @@
  #           |_|     
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, abort, url_for, session
+from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for
 #imports for the recaptcha
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
 from flask_bcrypt import Bcrypt
-from src.models import db, Users
+from src.models import db, Users, Comments, Post
+import base64
+import io
+from src.repositories.users_repository import users_repository_singleton
+from werkzeug.utils import secure_filename
 #------------------------------------------------------------------------------------------------------------------------------------------
 
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 bcrypt = Bcrypt(app)
 #------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +57,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 load_dotenv()
 
 db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('BD_PORT', '3306')
+db_port = os.getenv('DB_PORT', '3306')
 db_user = os.getenv('DB_USER', 'root')
 db_pass = os.getenv('DB_PASSWORD')
 db_name = os.getenv('DB_NAME', 'picnetic_db')
@@ -59,11 +67,36 @@ connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
 app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 db.init_app(app)
+picFolder = os.path.join('static', 'images')
+app.config['UPLOAD_FOLDER'] = picFolder
 
 @app.route('/', methods =['GET'])
 def index():
-    return render_template("index.html")
+
+    #check if the user is in the session
+    if 'user' in session:
+        #FAKE INFORMATION FOR TESTING -----------------------------------------
+        bio = "HI"
+        photo = "static/images/sportsphoto1.jpg"
+        imgType = "sports"
+        #------------------------------------------
+        #if the user makes a post request 
+        if request.method == 'POST':
+            #get the comment
+            comment = request.form.get("comment", '')
+            #check if the comment is real
+            if comment != '':
+                #PUT A POST ID HERE
+                #if it is real then create the comment and add it to the DB
+                #BLOEKC HERE BLOCKED HERE
+                #BLOCKED HERE
+                #BLOCKED HERE
+                newComment = Comments(session['user']['user_id'], comment, )
+
+        return render_template("index.html", photo = photo, bio = bio, imgType = imgType, us = session['user']['user_name'])
+    return render_template('index.html')
 
 @app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
@@ -115,6 +148,9 @@ def SignUp():
 
     return render_template("create_account.html")
 
+@app.route('/settings', methods=['GET','POST'])
+def settings():
+    return render_template("settings.html")
 
 #route for login
 @app.route('/sign-in', methods=['GET','POST']) 
@@ -146,7 +182,7 @@ def login():
             'user_id': user.user_id
             }
         #this line will have to change when the home page is made because this is just validating the user is in the session. 
-        return render_template("index.html", us = session['user']['user_name'])
+        return redirect("/")
     return render_template("login.html")
 
 @app.route('/account/<int:user_id>', methods =['GET'])
@@ -161,11 +197,37 @@ def userAccount(user_id):
         post_his = Users.query.get(Users.userAccount.posts)
     return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 
-
-@app.route('/new-post', methods=['GET', 'POST'])
+@app.route('/new-post', methods=['POST', 'GET'])
 def CreatePost(): 
-    
+    if request.method == 'POST':
+        formFile = request.files['formFile']
+
+        #if not formFile:
+        #    return 'No Image Uploaded', 400
+        
+        filename = secure_filename(formFile.filename)
+        formFile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        #user_name = From session
+        label = request.form.get('post-label')
+        cap = request.form.get('caption')
+
+        post = Post(post_label=label, post_cap=cap, post_picture=formFile.read(), picture_file_name=filename) #Add Username
+        db.session.add(post)
+        db.session.commit()
+        
+        print(post)
+
+
     return render_template("create_post.html")
+
+@app.get('/friends')
+def search_users():
+    found_users = []
+    q = request.args.get('q', '')
+    if q != '':
+        found_users = users_repository_singleton.search_users(q)
+    return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
     app.run()

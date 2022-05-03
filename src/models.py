@@ -40,11 +40,10 @@ class Friend(db.Model):
 
 class Comments(db.Model):
     __tablename__ = 'comments'
-    com_thread_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    comment_id = db.Column(db.Integer, primary_key=True, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     comment = db.Column(db.String(255))
-    posts = db.relationship('Post', backref='comments', lazy=True)
-
+    post_id = db.Column(db.Integer, db.ForeignKey('post.post_id'), nullable=False)
 
 #I used this website to help me create this enum:
 #https://stackoverflow.com/questions/2676133/best-way-to-do-enum-in-sqlalchemy
@@ -63,7 +62,8 @@ class Post(db.Model):
     user_name = db.Column(db.String(45), db.ForeignKey('users.user_name'), nullable=False)
     post_label = db.Column(Enum(post_enum))
     post_cap = db.Column(db.String(255), nullable=True)
-    com_thread_id = db.Column(db.Integer, db.ForeignKey('comments.com_thread_id'), nullable=False)
+    post_picture = db.Column(db.Text, nullable=False)
+    picture_file_name = db.Column(db.Text, nullable=False)
 
 #I used this webstie to help with the date attribute
 # https://stackoverflow.com/questions/13370317/sqlalchemy-default-datetime

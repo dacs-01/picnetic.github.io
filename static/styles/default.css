@@ -3,14 +3,14 @@ body {
     font-family: Oswald;
 }
 
-.header_light {
+header {
     overflow: hidden;
     background-color: white;
     margin-left: 300px;
     margin-right: 300px;
 }
 
-.header_light a {
+header a {
     float: right;
     color: #005035;
     text-align: center;
@@ -20,26 +20,18 @@ body {
     font-size: 34px;
 }
 
-.header_light a:hover {
+header a:hover {
     background-color: #817032;
     color: white;
 }
 
 .header_dark {
-    overflow: hidden;
     background-color: black;
-    margin-left: 300px;
-    margin-right: 300px;
 }
 
 .header_dark a {
-    float: right;
     color: #837236;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
     text-shadow: 2px 6px 4px #233a30;
-    font-size: 34px;
 }
 
 .header_dark a:hover {
@@ -47,14 +39,14 @@ body {
     color: white;
 }
 
-.footer_light {
+footer {
     overflow: hidden;
     background-color: white;
     margin-left: 450px;
     margin-right: 450px;
 }
 
-.footer_light a {
+footer a {
     float: left;
     color: #005035;
     padding: 0px 16px;
@@ -64,19 +56,12 @@ body {
 }
 
 .footer_dark {
-    overflow: hidden;
     background-color: black;
-    margin-left: 450px;
-    margin-right: 450px;
 }
 
 .footer_dark a {
-    float: left;
     color: #837236;
-    padding: 0px 16px;
-    text-decoration: none;
     text-shadow: 2px 6px 4px #233a30;
-    font-size: 14px;
 }
 
 .logo-image {
@@ -92,7 +77,11 @@ table,
 th,
 td {
     width: 100%;
+}
 
+body{
+    background-color: white;
+    color: black
 }
 
 .body_dark {
@@ -100,16 +89,18 @@ td {
     color: white;
 }
 
-.body_light {
-    background-color: white;
-    color: black
+.mode {
+    float:right;
 }
 
-.button_light {
-    background-color: #233a30;
-    border: #837236;
-    border-style: inset;
-    color: white;
+.change {
+    cursor: pointer;
+    border: 1px solid #555;
+    border-radius: 40%;
+    width: 20px;
+    text-align: center;
+    padding: 5px;
+    margin-left: 8px;
 }
 
 .my-custom-scrollbar {
