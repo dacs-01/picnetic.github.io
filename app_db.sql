@@ -14,7 +14,7 @@ create table if not exists users (
 );
 
 create table if not exists friend (
-	user_id int not null,
+	user_id int not null auto_increment,
     friend_id int not null,
     pending bool,
     primary key (user_id, friend_id),
@@ -24,7 +24,7 @@ create table if not exists friend (
 
 create table if not exists post (
 	user_name varchar(45) not null,
-    post_id int not null,
+    post_id int not null auto_increment,
     post_label enum('campus','sports',
     'stuorg','norm','alums','meme'),
     post_cap varchar(255) default null,
@@ -34,7 +34,7 @@ create table if not exists post (
 );
 
 create table if not exists comments (
-    comment_id int not null,
+    comment_id int not null auto_increment,
     user_id int not null,
     comment varchar(255),
     post_id int not null,
@@ -44,7 +44,7 @@ create table if not exists comments (
 );
 
 create table if not exists contact (
-	contact_id int not null, 
+	contact_id int not null auto_increment, 
 	user_id int not null,
     date datetime,
     email varchar(45) not null,
