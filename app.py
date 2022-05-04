@@ -191,16 +191,17 @@ def login():
         return redirect("/")
     return render_template("login.html")
 
-@app.route('/account', methods =['GET'])
-def userAccount(username):
+@app.route('/account/<int:user_id>', methods =['GET'])
+def userAccount(user_id):
     #check for username in our Users table
-    userAccount = Users.query.filter_by(username=Users.user_name).first()
+    userAccount = Users.query.filter_by(user_id=Users.user_id).first()
     if userAccount is None: #if user is not found
         return redirect(url_for('sign-in')) #redirect them to the sign in page
     else:
         #grab their comment and post history
         comment_his = Users.query.get(Users.userAccount.comments)
         post_his = Users.query.get(Users.userAccount.posts)
+
         #TODOadd checks for if user clicks (account settings), render settings page
     return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 def is_allowed(filename):
@@ -260,10 +261,13 @@ def get_post(post_id):
 
 @app.get('/friends')
 def search_users():
+    #creates empty array to store users
     found_users = []
     q = request.args.get('q', '')
+    #if the query is not empty searches the db for the user 
     if q != '':
         found_users = users_repository_singleton.search_users(q)
+    #return a template with the list of users found
     return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
