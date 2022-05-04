@@ -8,7 +8,7 @@
  #           |_|     
 import os
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for
+from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for, flash, send_from_directory
 #imports for the recaptcha
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy 
@@ -18,6 +18,8 @@ import base64
 import io
 from src.repositories.users_repository import users_repository_singleton
 from werkzeug.utils import secure_filename
+import requests
+import html
 #------------------------------------------------------------------------------------------------------------------------------------------
 
 UPLOAD_FOLDER = '/path/to/the/uploads'
@@ -93,8 +95,12 @@ def index():
                 #BLOEKC HERE BLOCKED HERE
                 #BLOCKED HERE
                 #BLOCKED HERE
-                newComment = Comments(session['user']['user_id'], comment, )
 
+
+                newComment = Comments(session['user']['user_id'], comment, )
+                #I am hopeuflly not blocked there anymore. This is my number one priotrity for now to get done. 
+                #need to add button here to do link it to the inidival post page for it. Think of this page as a preview for the post maybe. 
+                #maybe add a button that would directly take user to edit/delete page as well
         return render_template("index.html", photo = photo, bio = bio, imgType = imgType, us = session['user']['user_name'])
     return render_template('index.html')
 
@@ -197,30 +203,60 @@ def userAccount(username):
         post_his = Users.query.get(Users.userAccount.posts)
         #TODOadd checks for if user clicks (account settings), render settings page
     return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+def is_allowed(filename):
+    #cut the filename  at the . 
+    wordList = filename.split(".")
+    #check if teh extension is corerect. (uses -1 just in case there is a period in the filename for some reason)
+    if wordList[-1].lower() in ALLOWED_EXTENSIONS:
+        return True
+    else:
+        return False
+
 
 @app.route('/new-post', methods=['POST', 'GET'])
 def CreatePost(): 
-    if request.method == 'POST':
-        formFile = request.files['formFile']
-
-        #if not formFile:
-        #    return 'No Image Uploaded', 400
+    if 'user' in session:
         
-        filename = secure_filename(formFile.filename)
-        formFile.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        print(session['user']['user_name'])
+        if request.method == 'POST':
+            print("HI")
+            #get the file. 
+            image = request.files['file']
+            #if no file was uploaeded then send an error
+            if image.filename == "":
+                abort(404)
+            #check if the file is supported and an image
+            if image and is_allowed(image.filename):
+                imageName = secure_filename(image.filename)
+                #save the image in the upload folder. 
+                image.save(os.path.join(app.config['UPLOAD_FOLDER'], imageName))
+                imageURL = url_for('uploaded_file', filename=imageName)
 
-        #user_name = From session
-        label = request.form.get('post-label')
-        cap = request.form.get('caption')
+                
+            label = request.form.get('post-label')
+            cap = request.form.get('caption')
+            imageURL = str(imageURL)
+            post = Post(user_name = session['user']['user_name'], post_label=label, post_cap=cap, post_picture= imageURL) #Add Username
+            db.session.add(post)
+            db.session.commit()
+            
+            print(post)
+            
+            return get_post(post.post_id)
+    return render_template("bruv.html")
 
-        post = Post(post_label=label, post_cap=cap, post_picture=formFile.read(), picture_file_name=filename) #Add Username
-        db.session.add(post)
-        db.session.commit()
-        
-        print(post)
+    
+#route that makes an image a link
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
+@app.route('/<post_id>')
+def get_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
+    return render_template("singlepost.html", post = post)
 
-    return render_template("create_post.html")
 
 @app.get('/friends')
 def search_users():

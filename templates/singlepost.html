@@ -1,0 +1,73 @@
+{% extends '_layout.html' %}
+
+{% block title %}Picnetic | Picnetic Home{% endblock %}
+
+{% block body %}
+<style>
+    .content{
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 10px;
+        width: 40%;
+    }
+    .close {
+        color: #aaa;
+        font-size: 25px;
+        font-weight: bold;
+        display: flex;
+    }      
+    .header{
+        text-align: left;
+        font-size: 30px;
+        background-color: #005035;
+        color: #fefefe;
+        line-height: 33px;
+        display: inline-block;
+        
+
+    }
+    .para{
+        padding-top: 5px;
+        padding-left: 5px;
+        text-align: left;
+        font-size: 20px;
+    }
+    .addCom{
+        width: 85%;
+        height: 40px;
+        vertical-align: top;
+        
+    }
+    .submit{
+        padding-top: 10px;
+        height: 40px;
+        vertical-align: top;
+        line-height: 0;
+    }
+    .loadImg {
+        width: 100%;
+        height: auto;
+    }
+</style>
+        
+
+    <div class = "content">
+    
+    <div style = "text-align: left; padding-left: 5px;">
+        <h2 class = "header">  {{ post.post_label }}</h2>
+    </div>
+    <img src = "{{ post.post_picture }}" class = "loadImg"> 
+    <p class = "para">{{ post.post_cap }}</p>
+    <form method ="post" name = "comment">
+        <input id = "comment" type = "text" class = "addCom" placeholder = "Add a comment here">
+        <input type = "submit" class = "submit">
+    </form>
+
+    <form method = "post" name = "edit" >
+        <input type = "button" class = "submit" value = "edit/delete">
+    </form>
+</div>
+
+{% endblock %}
+
+
