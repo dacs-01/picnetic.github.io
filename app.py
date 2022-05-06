@@ -22,12 +22,13 @@ import requests
 import html
 #------------------------------------------------------------------------------------------------------------------------------------------
 
-UPLOAD_FOLDER = '/path/to/the/uploads'
+UPLOAD_FOLDER = '/static/images'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+print(app.config['UPLOAD_FOLDER'])
 bcrypt = Bcrypt(app)
 #------------------------------------------------------------------------------------------------------------------------------------------
 #                                          __ _                       _   _             
@@ -74,35 +75,44 @@ db.init_app(app)
 picFolder = os.path.join('static', 'images')
 app.config['UPLOAD_FOLDER'] = picFolder
 
-@app.route('/', methods =['GET'])
+@app.route('/', methods =['GET', 'POST'])
 def index():
-
+    #Query all of the items from each table for sending in later
+    posts = Post.query.all() 
+    comments = Comments.query.all()
+    users = Users.query.all()
+    
+    post1 = "hi"
+    
+    if posts != []:
+        post1 = posts[0]
+    
+    formNum = 0
+    hi = ""
     #check if the user is in the session
     if 'user' in session:
-        #FAKE INFORMATION FOR TESTING -----------------------------------------
-        bio = "HI"
-        photo = "static/images/sportsphoto1.jpg"
-        imgType = "sports"
-        #------------------------------------------
         #if the user makes a post request 
         if request.method == 'POST':
+            
             #get the comment
-            comment = request.form.get("comment", '')
-            #check if the comment is real
+            comment = ""
+            #get the post id that the comment was made on. I have to do this because the modal doesn't make a get request to a certain page
+            for i in range(len(posts)):
+                if request.form['post'] == str(i):
+                    formNum = i
+                    comment = request.form.get('comment')
+
+
+            #check if the comment is real create the comment
             if comment != '':
-                #PUT A POST ID HERE
-                #if it is real then create the comment and add it to the DB
-                #BLOEKC HERE BLOCKED HERE
-                #BLOCKED HERE
-                #BLOCKED HERE
-
-
-                newComment = Comments(session['user']['user_id'], comment, )
-                #I am hopeuflly not blocked there anymore. This is my number one priotrity for now to get done. 
-                #need to add button here to do link it to the inidival post page for it. Think of this page as a preview for the post maybe. 
-                #maybe add a button that would directly take user to edit/delete page as well
-        return render_template("index.html", photo = photo, bio = bio, imgType = imgType, us = session['user']['user_name'])
-    return render_template('index.html')
+                newComment = Comments(user_id = int(session['user']['user_id']), comment = comment, post_id = int(formNum))
+                db.session.add(newComment)
+                db.session.commit()
+                #TODO add a button in the html that brings you to the big page for a single post. Also maybe add an optional edit/delet button only if a user is logged in. 
+    
+                return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
+        return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
+    return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
 
 @app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
@@ -220,7 +230,7 @@ def CreatePost():
         
         print(session['user']['user_name'])
         if request.method == 'POST':
-            print("HI")
+            
             #get the file. 
             image = request.files['file']
             #if no file was uploaeded then send an error
@@ -248,7 +258,7 @@ def CreatePost():
 
     
 #route that makes an image a link
-@app.route('/uploads/<filename>')
+@app.route('/static/images/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
