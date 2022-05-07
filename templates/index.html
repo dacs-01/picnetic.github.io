@@ -21,10 +21,8 @@
     {
         width: 50%; 
         height: auto;
-
     }
     .modal{
-        display: none;
         position: fixed;
         z-index: 1;
         width: 100%;
@@ -35,7 +33,7 @@
 
     }
     .content{
-        background-color: #fefefe;
+        background-color: black;
         margin: 5% auto;
         padding: 10px;
         width: 60%;
@@ -47,20 +45,17 @@
         display: flex;
     }      
     .header{
-        text-align: left;
+        text-align: center;
         font-size: 30px;
-        background-color: #005035;
-        color: #fefefe;
+        color: white;
         line-height: 33px;
-        display: inline-block;
-        
-
+        display: block;
     }
     .para{
-        padding-top: 5px;
-        padding-left: 5px;
-        text-align: left;
+        color: white;
+        text-align: center;
         font-size: 20px;
+        vertical-align: top;
     }
     .addCom{
         width: 85%;
@@ -68,17 +63,24 @@
         vertical-align: top;
         
     }
-    .submit{
-        padding-top: 10px;
-        height: 40px;
-        vertical-align: top;
-        line-height: 0;
-    }
     .loadImg {
-        width: 100%;
+        width: 50%;
+        border-color:#005035;
+        border-style: solid;
         height: auto;
     }
+    .container{
+        margin-left: 23.4375%;
+        margin-right: 23.4375%; 
+    }
 
+    .submit{
+        background-color: #005035; 
+        color:white; 
+        width: 10%; 
+        height: 40px; 
+        font-size: 25px;
+    }
     .com{
         font-size: 15px;
     }
@@ -111,7 +113,7 @@
             <p class = "para">{{ hi.post_cap }}</p>
             <form method ="POST" >
                 <input type = "hidden" name = "post" value = "{{ hi.post_id }}">
-                <input id = "comment" type = "text" class = "addCom" placeholder = "Add a comment here" name ="comment">
+                <input id = "comment" style = "width: 40%;" type = "text" class = "addCom" placeholder = "Add a comment here" name ="comment">
                 <input type = "submit" class = "submit">
             </form>
             <table>

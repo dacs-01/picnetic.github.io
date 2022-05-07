@@ -269,7 +269,7 @@ def get_post(post_id):
     return render_template("singlepost.html", post = post)
 
 
-@app.get('/friends')
+@app.get('/search-users')
 def search_users():
     #creates empty array to store users
     found_users = []
@@ -278,7 +278,7 @@ def search_users():
     if q != '':
         found_users = users_repository_singleton.search_users(q)
     #return a template with the list of users found
-    return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
+    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
     app.run()
