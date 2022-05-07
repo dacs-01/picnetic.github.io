@@ -1,3 +1,5 @@
+<!--Page inspired by https://pythonbasics.org/flask-upload-file/ and https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/-->
+
 {% extends '_layout.html' %}
 
 {% block title %}Picnetic | Create Post{% endblock %}
@@ -17,7 +19,7 @@
 <div class="container col-md-6">
   <h1>Upload new File</h1>
   <hr>
-  <form method=post enctype=multipart/form-data method = "text-align: center;">   
+  <form method=post enctype=multipart/form-data method = "text-align: center;" >   
     <img style = "display: block; margin-top: 25px; margin-left: auto; margin-right: auto; width: 40%;" id="frame" name= "frame" src="" class="img-fluid" />
     <h2 style = "font-size: 20px;  margin-top: 30px;" for="file"  class="form-label">Upload your image and type your caption below!</h2><br> 
     <input type=file name=file onchange="preview()" style = "font-size: 20px;"class="form-control mb-3">

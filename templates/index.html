@@ -97,11 +97,12 @@
     {% for hi in posts %}
     <div class="grid-item">
         
-    
-        
-     <input type = "image" src="{{ hi.post_picture }} " id = "image" class = "image" name = "form">  
-        
-        <div class = "modal" id = "ModalForImage-{{ hi.post_id }}"> 
+     <input type = "image" src="{{ hi.post_picture }} " id = "image-{{ hi.post_id }}" class = "image" name = "{{ hi.post_id }}">  
+
+</div>
+{% endfor %}
+{% for hi in posts %}
+    <div class = "modal" id = "ModalForImage-{{ hi.post_id }}" name = "{{ hi.post_id }}"> 
             <div class = "content">
             <div style = "text-align: right;">
                 <span class = "closeModal">x</span><br>
@@ -132,28 +133,37 @@
             </table>
         </div>
     </div>
+    
+    {% endfor %}
 
-    </div>
-
-   
-</div>
-{% endfor %}
+    
 <script>
-    // make the modal 
-var modal = document.getElementById(document.querySelector('[id^="ModalForImage-"]').id);
+    // make the modal
+
 
 // make the button that opens the modal, it is connected to the image
-var image = document.getElementById("image");
+var image = document.getElementsByClassName('image');
+for(var i = 0; i<image.length; i++){
+
 
 // button the image that closes the modal, connected to the little x in the modal
 var closeButton = document.getElementsByClassName("closeModal")[0];
 
-// When the user clicks on the image, open the modal
-image.addEventListener('click', onclick);
-image.onclick = function() { modal.style.display = "block"; };
 
-// When the user clicks the x in the modal close it
+// When the user clicks on the image, open the modal
+image[i].addEventListener('click', onclick);
+var modal = document.getElementsByClassName("modal");
+image[i].onclick = function() { 
+    
+    modal.style.display = "block";
+    modal.src = this.src
+    
+};
+}
+// Wh}en the user clicks the x in the modal close it
 closeButton.onclick = function() {
+    
+
   modal.style.display = "none";
 }
 
@@ -161,9 +171,13 @@ closeButton.onclick = function() {
 window.onclick = function(event) {
 
   if (event.target == modal) {
+    
+
     modal.style.display = "none";
+
   }
 } 
+
 </script>
 
 {% endblock %}

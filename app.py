@@ -112,7 +112,7 @@ def index():
     
                 return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
         return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
-    return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users)
+    return redirect("/sign-up")
 
 @app.route('/contact-us', methods=['GET', 'POST']) 
 def contact(): 
@@ -264,12 +264,21 @@ def uploaded_file(filename):
 
 @app.route('/<post_id>')
 def get_post(post_id):
+    #get all of the needed code.
     post = Post.query.get_or_404(post_id)
+    comments = Comments.query.all()
+    users = Users.query.all()
     #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
     return render_template("singlepost.html", post = post)
 
 
+@app.route('/post/<post_id>/edit')
+def edit_post(post_id):
+    post = Post.query.get(post_id)
+    return render_template("edit.html", post = post)
+
 @app.get('/search-users')
+
 def search_users():
     #creates empty array to store users
     found_users = []
