@@ -271,11 +271,14 @@ def get_post(post_id):
     #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
     return render_template("singlepost.html", post = post)
 
+
 @app.route('/post/<post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
     return render_template("edit.html", post = post)
-@app.get('/friends')
+
+@app.get('/search-users')
+
 def search_users():
     #creates empty array to store users
     found_users = []
@@ -284,7 +287,7 @@ def search_users():
     if q != '':
         found_users = users_repository_singleton.search_users(q)
     #return a template with the list of users found
-    return render_template('friends.html', search_active=True, userlist=found_users, search_query=q)
+    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
 
 if __name__ == '__main__':
     app.run()
