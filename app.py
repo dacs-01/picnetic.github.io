@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for, flash, send_from_directory
 #imports for the recaptcha
 from form import captchaForm
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from src.models import db, Users, Comments, Post
 import base64
@@ -245,6 +245,7 @@ def CreatePost():
 
                 
             label = request.form.get('post-label')
+            print(label)
             cap = request.form.get('caption')
             imageURL = str(imageURL)
             post = Post(user_name = session['user']['user_name'], post_label=label, post_cap=cap, post_picture= imageURL) #Add Username
@@ -268,24 +269,51 @@ def get_post(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comments.query.all()
     users = Users.query.all()
+
+
     #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post = post)
+    return render_template("singlepost.html", post = post, us = session['user']['user_name'])
 
 
 @app.route('/post/<post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
-    return render_template("edit.html", post = post)
+    if session['user']['user_name'] == post.user_name:
+        return render_template("edit.html", post = post)
+    else:
+        abort(400)
+
+@app.post('/<post_id>')
+def upadate_post(post_id):
+    updatePost = Post.query.get(post_id)
+    type = request.form.get('post-label', '')
+    caption = request.form.get('caption', '')
+
+    if type == "none":
+        type = updatePost.post_label
+    if caption == '':
+        caption = updatePost.post_cap
+
+    updatePost.post_cap = caption
+    updatePost.post_label = type
+
+    db.session.commit()
+
+
+    return redirect(f'/{post_id}')
+
+@app.post('/posts/<post_id>/delete')
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if session['user']['user_name'] == post.user_name:
+        db.session.delete(post)
+        db.session.commit()
+        return redirect('/')
+    else:
+        abort(400)
+
 
 @app.get('/search-users')
-
-@app.errorhandler(400)
-def bad_request(e):
-    return render_template('400.html'), 400
-
-@app.errorhandler(404)
-def not_found(e):
-    return render_template('404.html'), 404
 def search_users():
     #creates empty array to store users
     found_users = []
@@ -295,6 +323,15 @@ def search_users():
         found_users = users_repository_singleton.search_users(q)
     #return a template with the list of users found
     return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
+  
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html'), 400
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run()

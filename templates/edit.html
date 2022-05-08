@@ -8,8 +8,8 @@
 
 <form action="/{{ post.post_id }}" method="post">
     <label for="post-label" > pick a label for your post</label>
-    <select for="post-label" id="post-label" name = "post-label" class="form-control" value = "{{ post.post_lable }}">
-        <option value="none">Please Select A Label</option>
+    <select for="post-label" id="post-label" name = "post-label" class="form-control" value = '{{ post.post_label }} '>
+        <option value="none">{{ post.post_label }}</option>
         <option value="campus">Campus</option>
         <option value="sports">Sports</option>
         <option value="stuorg">Student Org</option>
@@ -17,7 +17,7 @@
         <option value="alums">Alums</option>
         <option value="meme">Meme</option>
       </select>
-      <textarea style = "font-size: 20px;  margin-top: 60px;" id="caption" name="caption" rows="4" cols="100" value = "{{ post.post_cap }}"></textarea><br>
+      <textarea style = "font-size: 20px;  margin-top: 60px;" id="caption" name="caption" rows="4" cols="100"  autocomplete = "off">{{ post.post_cap }}</textarea><br>
 
 
     <button type = "submit" style = "background-color: #005035; color:white; height: 100%; width: 100.75% ">Submit</button>
