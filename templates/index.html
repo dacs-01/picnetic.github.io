@@ -8,18 +8,23 @@
 <style>
     .grid-container{
         display: grid;
-        grid-template-columns: auto auto;
-        padding: 5px;
+        grid-template-columns: auto auto;    
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
     }
     .grid-item{
-        padding: 10px;
-        font-size: 30px;
         text-align: center;
-
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
     }
     .image
     {
-        width: 50%; 
+        border-color: #005035;
+        border-style: double;    
+        width: 250px; 
         height: auto;
     }
     .modal{
@@ -33,6 +38,8 @@
 
     }
     .content{
+        border: white;
+        border-style: solid;
         background-color: black;
         margin: 5% auto;
         padding: 10px;
@@ -58,15 +65,18 @@
         vertical-align: top;
     }
     .addCom{
-        width: 85%;
+        display: inline;
+        margin-left: 25%;
         height: 40px;
-        vertical-align: top;
-        
+        width: 40%;
     }
     .loadImg {
         width: 50%;
         border-color:#005035;
         border-style: solid;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         height: auto;
     }
     .container{
@@ -78,13 +88,51 @@
         background-color: #005035; 
         color:white; 
         width: 10%; 
-        height: 40px; 
-        font-size: 25px;
+        height: 43px; 
+        font-size: 20px;
     }
     .com{
         font-size: 15px;
     }
 </style>
+
+<script>
+// make the modal
+
+
+// make the button that opens the modal, it is connected to the image
+var image = document.getElementsByClassName('image');
+for(var i = 0; i<image.length; i++){
+    // button the image that closes the modal, connected to the little x in the modal
+    var closeButton = document.getElementsByClassName("closeModal")[0];
+
+
+    // When the user clicks on the image, open the modal
+    image[i].addEventListener('click', onclick);
+    var modal = document.getElementsByClassName("modal")[i];
+}
+// When the user clicks the x in the modal close it
+closeButton.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks away from the modal close out of it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+} 
+
+function displayPicture(picture){
+    let id = "ModalForImage-" + picture.id.substring(6);
+    document.getElementById(id).style.display = "block";
+}
+
+function closePicture(picture){
+    let id = picture.id.substring(5);
+    document.getElementById(id).style.display = "none";
+}
+</script>
 
 <div class="container">
     
@@ -97,15 +145,15 @@
     {% for hi in posts %}
     <div class="grid-item">
         
-     <input type = "image" src="{{ hi.post_picture }} " id = "image-{{ hi.post_id }}" class = "image" name = "{{ hi.post_id }}">  
+     <input type = "image" src="{{ hi.post_picture }} " id = "image-{{ hi.post_id }}" onclick='displayPicture(this)' class = "image" name = "{{ hi.post_id }}">  
 
 </div>
 {% endfor %}
 {% for hi in posts %}
     <div class = "modal" id = "ModalForImage-{{ hi.post_id }}" name = "{{ hi.post_id }}"> 
             <div class = "content">
-            <div style = "text-align: right;">
-                <span class = "closeModal">x</span><br>
+            <div style = "text-align: right; color: white;">
+                <span class = "closeModal" id = "CloseModalForImage-{{ hi.post_id }}" onclick='closePicture(this)'>X</span><br>
             </div>
             <div style = "text-align: left; padding-left: 5px;">
                 <h2 class = "header">  {{ hi.post_label }}</h2>
@@ -114,7 +162,7 @@
             <p class = "para">{{ hi.post_cap }}</p>
             <form method ="POST" >
                 <input type = "hidden" name = "post" value = "{{ hi.post_id }}">
-                <input id = "comment" style = "width: 40%;" type = "text" class = "addCom" placeholder = "Add a comment here" name ="comment">
+                <input id = "comment" type = "text" class = "addCom" placeholder = "Add a comment here" name ="comment">
                 <input type = "submit" class = "submit">
             </form>
             <table>
@@ -135,50 +183,6 @@
     </div>
     
     {% endfor %}
-
-    
-<script>
-    // make the modal
-
-
-// make the button that opens the modal, it is connected to the image
-var image = document.getElementsByClassName('image');
-for(var i = 0; i<image.length; i++){
-
-
-// button the image that closes the modal, connected to the little x in the modal
-var closeButton = document.getElementsByClassName("closeModal")[0];
-
-
-// When the user clicks on the image, open the modal
-image[i].addEventListener('click', onclick);
-var modal = document.getElementsByClassName("modal");
-image[i].onclick = function() { 
-    
-    modal.style.display = "block";
-    modal.src = this.src
-    
-};
-}
-// Wh}en the user clicks the x in the modal close it
-closeButton.onclick = function() {
-    
-
-  modal.style.display = "none";
-}
-
-// When teh user clicks away from the modal close out of it
-window.onclick = function(event) {
-
-  if (event.target == modal) {
-    
-
-    modal.style.display = "none";
-
-  }
-} 
-
-</script>
 
 {% endblock %}
 
