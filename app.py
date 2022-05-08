@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for, flash, send_from_directory
 #imports for the recaptcha
 from form import captchaForm
-from flask_sqlalchemy import SQLAlchemy 
+from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from src.models import db, Users, Comments, Post
 import base64
@@ -245,6 +245,7 @@ def CreatePost():
 
                 
             label = request.form.get('post-label')
+            print(label)
             cap = request.form.get('caption')
             imageURL = str(imageURL)
             post = Post(user_name = session['user']['user_name'], post_label=label, post_cap=cap, post_picture= imageURL) #Add Username
@@ -277,8 +278,16 @@ def edit_post(post_id):
     post = Post.query.get(post_id)
     return render_template("edit.html", post = post)
 
-@app.get('/search-users')
+@app.post('/<post_id>')
+def upadate_post(post_id):
+    updatePost = Post.query.get(post_id)
+    type = request.form.get('post-label', '')
+    caption = request.form.get('caption', '')
 
+    
+
+
+@app.get('/search-users')
 def search_users():
     #creates empty array to store users
     found_users = []

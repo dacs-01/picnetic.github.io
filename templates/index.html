@@ -152,7 +152,7 @@ var closeButton = document.getElementsByClassName("closeModal")[0];
 
 // When the user clicks on the image, open the modal
 image[i].addEventListener('click', onclick);
-var modal = document.getElementsByClassName("modal");
+var modal = document.getElementsByClassName("modal")[i];
 image[i].onclick = function() { 
     
     modal.style.display = "block";
