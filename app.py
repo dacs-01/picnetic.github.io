@@ -299,6 +299,7 @@ def upadate_post(post_id):
 
     db.session.commit()
 
+
     return redirect(f'/{post_id}')
 
 @app.post('/posts/<post_id>/delete')
@@ -322,6 +323,15 @@ def search_users():
         found_users = users_repository_singleton.search_users(q)
     #return a template with the list of users found
     return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
+  
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html'), 400
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
+
 
 if __name__ == '__main__':
     app.run()

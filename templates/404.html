@@ -1,0 +1,28 @@
+{% extends '_layout.html' %}
+
+{% block title %}Picnetic | 404 Error{% endblock %}
+
+{% block body %}
+<style>
+    h1{
+        text-align: center;
+        margin-left: 23.4375%;
+        margin-right: 23.4375%;
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+    .error-image{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 150px;
+        border-style: solid;
+        border-color: white;
+        
+    }
+</style>
+
+<h1>The requested page is not available. Make sure your input is correct and the page exists (Code 404).</h1>
+<img class="error-image" src="/static/images/error.jpg" alt="Error logo">   
+
+{% endblock %}
