@@ -123,11 +123,13 @@ window.onclick = function(event) {
     }
 } 
 
+// Display function for modal
 function displayPicture(picture){
     let id = "ModalForImage-" + picture.id.substring(6);
     document.getElementById(id).style.display = "block";
 }
 
+// Function to close the modal 
 function closePicture(picture){
     let id = picture.id.substring(5);
     document.getElementById(id).style.display = "none";
