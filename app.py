@@ -269,14 +269,19 @@ def get_post(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comments.query.all()
     users = Users.query.all()
+
+
     #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post = post)
+    return render_template("singlepost.html", post = post, us = session['user']['user_name'])
 
 
 @app.route('/post/<post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
-    return render_template("edit.html", post = post)
+    if session['user']['user_name'] == post.user_name:
+        return render_template("edit.html", post = post)
+    else:
+        abort(400)
 
 @app.post('/<post_id>')
 def upadate_post(post_id):
@@ -284,7 +289,27 @@ def upadate_post(post_id):
     type = request.form.get('post-label', '')
     caption = request.form.get('caption', '')
 
-    
+    if type == "none":
+        type = updatePost.post_label
+    if caption == '':
+        caption = updatePost.post_cap
+
+    updatePost.post_cap = caption
+    updatePost.post_label = type
+
+    db.session.commit()
+
+    return redirect(f'/{post_id}')
+
+@app.post('/posts/<post_id>/delete')
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if session['user']['user_name'] == post.user_name:
+        db.session.delete(post)
+        db.session.commit()
+        return redirect('/')
+    else:
+        abort(400)
 
 
 @app.get('/search-users')

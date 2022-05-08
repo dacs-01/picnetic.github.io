@@ -65,7 +65,12 @@
         <input type = "submit" class = "submit">
     </form>
     <br>
-    <a href="/post/{{ post.post_id }}/edit">Edit/Delete</a>
+    {% if post.user_name == us %}
+    <a href="/post/{{ post.post_id }}/edit">Edit</a>
+    <form method = "post" action ="/posts/{{ post.post_id }}/delete">
+        <button type = "submit">Delete</button>
+    </form>
+    {% endif %}
     </div>
 </div>
 {% endblock %}
