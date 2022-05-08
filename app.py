@@ -279,6 +279,13 @@ def edit_post(post_id):
 
 @app.get('/search-users')
 
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html'), 400
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
 def search_users():
     #creates empty array to store users
     found_users = []
