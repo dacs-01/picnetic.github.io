@@ -82,7 +82,7 @@ def index():
     posts = Post.query.all() 
     comments = Comments.query.all()
     users = Users.query.all()
-    
+    print(posts)
     post1 = "hi"
     
     if posts != []:
@@ -99,8 +99,10 @@ def index():
             comment = ""
             #get the post id that the comment was made on. I have to do this because the modal doesn't make a get request to a certain page
             for i in range(len(posts)):
-                if request.form['post'] == str(i):
-                    formNum = i
+                id = posts[i].post_id
+                
+                if request.form['post'] == str(id):
+                    formNum = id
                     comment = request.form.get('comment')
 
 
@@ -260,7 +262,7 @@ def CreatePost():
             return get_post(post.post_id)
     return render_template("bruv.html")
 
-    
+
 #route that makes an image a link
 @app.route('/static/images/<filename>')
 def uploaded_file(filename):
@@ -273,9 +275,10 @@ def get_post(post_id):
     comments = Comments.query.all()
     users = Users.query.all()
 
+    
 
     #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post = post, us = session['user']['user_name'])
+    return render_template("singlepost.html", post = post, us = session['user']['user_name'], comments = comments)
 
 
 @app.route('/post/<post_id>/edit')
@@ -305,15 +308,44 @@ def upadate_post(post_id):
 
     return redirect(f'/{post_id}')
 
+#delete post and all comments related to the post
 @app.post('/posts/<post_id>/delete')
 def delete_post(post_id):
+    #get the post comments
     post = Post.query.get(post_id)
     if session['user']['user_name'] == post.user_name:
+        
+        comments = Comments.query.all()
+        #make sure the comment relates to the post being deleted and delete them
+        for c in comments:
+            if c.post_id == post.post_id:
+                db.session.delete(c)
+                db.session.commit()
+        #make sure the user can delete the post. If they can then delte the post
+        
         db.session.delete(post)
         db.session.commit()
         return redirect('/')
     else:
         abort(400)
+
+@app.post('/comment')
+def createNewComment():
+    if 'user' in session:
+        print(session['user']['user_name'])
+
+    if request.form['post'] == "comment":
+        comment = request.form.get("comment")
+        if comment == '':
+            abort(404)
+        #create the comment if there is one to create
+        newComment = Comments(user_id = int(session['user']['user_id']), comment = comment, )
+        db.session.add(newComment)
+        db.session.commit()
+                    
+
+
+
 
 
 @app.get('/search-users')
