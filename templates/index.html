@@ -138,11 +138,6 @@ function closePicture(picture){
 </script>
 
 <div class="container">
-    
-
-<h1> suh dude</h1>
-<p>{{ us }}</p>
-</div>
 
 <div class="grid-container">
     {% for hi in posts %}
@@ -159,7 +154,7 @@ function closePicture(picture){
                 <span class = "closeModal" id = "CloseModalForImage-{{ hi.post_id }}" onclick='closePicture(this)'>X</span><br>
             </div>
             <div style = "text-align: left; padding-left: 5px;">
-                <h2 class = "header">  {{ hi.post_label }}</h2>
+                <h2 class = "header"><a href = "/{{ hi.post_id }}">  {{ hi.post_label }}</a></h2>
             </div>
             <img src ="{{ hi.post_picture }}" class = "loadImg"> 
             <p class = "para">{{ hi.post_cap }}</p>
@@ -177,7 +172,12 @@ function closePicture(picture){
                         {% if user.user_id == c.user_id %} 
                             <td class = "com"> {{ user.user_name }}</td>  
                     {% endif %} 
-                    {% endfor %}-
+                    {% endfor %}
+                    
+                    {% if c.user_id == ui %} 
+                        <td class = "com"> <a href = "/comment/{{ c.comment_id }}">view comment</a>></td>  
+                {% endif %} 
+                
                 {% endif %}
             </tr>
             {% endfor %}
