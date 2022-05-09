@@ -22,9 +22,9 @@
                 <table class="table table-bordered table-striped mb-0">
                     <tbody>
                         <tr>
-                            {{ for comments in comment_his }}
+                            {% for comments in comment_his %}
                             <td>{{ comments }}</td>
-                            {{ endfor }}
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>
@@ -43,9 +43,9 @@
                 <table class="table table-bordered table-striped mb-0">
                     <tbody>
                         <tr>
-                            {{ for posts in post_his }}
+                            {% for posts in post_his %}
                             <td>{{ posts }}</td>
-                            {{ endfor }}
+                            {% endfor %}
                         </tr>
                     </tbody>
                 </table>

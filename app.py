@@ -9,6 +9,7 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for, flash, send_from_directory
+from sqlalchemy import null
 #imports for the recaptcha
 from form import captchaForm
 from flask_sqlalchemy import SQLAlchemy
@@ -62,7 +63,7 @@ load_dotenv()
 db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', '3306')
 db_user = os.getenv('DB_USER', 'root')
-db_pass = os.getenv('DB_PASSWORD')
+db_pass = os.getenv('DB_PASSWORD', '8569742Dl!')
 db_name = os.getenv('DB_NAME', 'picnetic_db')
 
 connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
@@ -197,23 +198,25 @@ def login():
             'user_name': userName,
             'user_id': user.user_id
             }
+        
         #this line will have to change when the home page is made because this is just validating the user is in the session. 
         return redirect("/")
     return render_template("login.html")
 
-@app.route('/account/<int:user_id>', methods =['GET'])
+@app.route('/account/<user_id>', methods =['GET'])
 def userAccount(user_id):
+    print(session['user']['user_id'])
+    if 'user' in session:
+        userid = session['user']['user_id']
     #check for username in our Users table
-    userAccount = Users.query.filter_by(user_id=Users.user_id).first()
-    if userAccount is None: #if user is not found
-        return redirect(url_for('sign-in')) #redirect them to the sign in page
-    else:
-        #grab their comment and post history
-        comment_his = Users.query.get(Users.userAccount.comments)
-        post_his = Users.query.get(Users.userAccount.posts)
+        userAccount = Users.query.get(userid)
+        comment_his = userAccount.comments
+        post_his = userAccount.posts
+        print(userAccount)
+        if comment_his or post_his is null:
+            return render_template("account2.html", userAccount = userAccount)
 
-        #TODOadd checks for if user clicks (account settings), render settings page
-    return render_template("user_account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
+    return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his )
 def is_allowed(filename):
     #cut the filename  at the . 
     wordList = filename.split(".")
