@@ -138,3 +138,21 @@ body{
 .table-wrapper-scroll-y {
     display: block;
 } 
+
+#editbut{
+    float: right !important;
+    background-color: #005035; 
+    color:white; 
+    height: 50px; 
+    font-weight: bold;  
+    display: inline;
+}
+
+#deletebut{
+    float: right !important;
+    background-color: red; 
+    color:white; 
+    height: 50px; 
+    font-weight: bold;  
+    display: inline;
+}
