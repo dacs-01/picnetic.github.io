@@ -1,0 +1,19 @@
+if request.method == 'POST':
+        if request.form['name'] == "comment":
+
+            id = request.form.get['postID']
+            comment = request.form.get('commentName')
+            print(comment)
+            if comment != '':
+                newComment = Comments(user_id = int(session['user']['user_id']), comment = comment, post_id = int(id))
+                db.session.add(newComment)
+                db.session.commit()
+
+
+
+   <form method ="post" name = "comment">
+        <input type = "hidden" name = "name" value = "comment">
+        <input type = "hidden" name = "postID" value = "{{ post.post_id }}" >
+        <input id = "commentName" name = "commentName" type = "text" class = "addCom" placeholder = "Add a comment here" autofill = "off">
+        <input type = "submit" class = "submit">
+    </form>
