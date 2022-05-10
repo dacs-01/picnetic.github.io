@@ -12,9 +12,10 @@
 <h1>Edit Comment</h1>
 
 <form action="/comment/{{ comment.comment_id }}" method="post">
-    <input type = "text" style = "font-size: 20px; margin-top: 60px;" id = "comment" name = "comment" value = "{{ comment.comment }}">
+    <label style = "font-size: 20px; margin-top: 5%;" >Rewrite your comment:</label><br>
+    <input type = "text" id = "comment" name = "comment" style= "width: 100%;" value = "{{ comment.comment }}">
 
 
-    <button type = "submit" style = "background-color: #005035; color:white; height: 100%; width: 100% ">Submit</button>
+    <button type = "submit" style = "background-color: #005035; color:white; height: 100%; width: 100%; margin-top: 2%; ">Submit</button>
 </form>
 {% endblock %}
