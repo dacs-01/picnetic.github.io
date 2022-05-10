@@ -112,15 +112,8 @@ def index():
                     session['user']['user_id']), comment=comment, post_id=int(formNum))
                 db.session.add(newComment)
                 db.session.commit()
-<<<<<<< HEAD
-                # TODO add a button in the html that brings you to the big page for a single post. Also maybe add an optional edit/delet button only if a user is logged in.
-
-                return render_template("index.html", us=session['user']['user_name'], posts=posts, comments=comments, users=users)
-        return render_template("index.html", us=session['user']['user_name'], posts=posts, comments=comments, users=users)
-=======
                 return redirect(f'/comment/{newComment.comment_id}')
-        return render_template("index.html", us = session['user']['user_name'], posts = posts, comments = comments, users = users, ui = session['user']['user_id'])
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
+        return render_template("index.html", us=session['user']['user_name'], posts=posts, comments=comments, users=users, ui=session['user']['user_id'])
     return redirect("/sign-up")
 
 
@@ -132,27 +125,19 @@ def contact():
 
     # check for a post request and see if the form is submitted and vailidated. (the last 2 are checked on validate_on_submit)
     if form.validate_on_submit() and request.method == "POST":
-<<<<<<< HEAD
         issue = form.Issue.data  # get the information from the textarea
-        # TODO put information from the issue into the database when tehre is a spot for it
-        print(issue)
-
-    # pass int he form object to the html page. ON the html side everything is loaded using Jinja2
-
-=======
-        issue = form.Issue.data #get the information from the textarea 
 
         contact_id = session['user']['user_id']
         userMail = Users.query.get(contact_id)
 
-        newIssue = Contact(user_id = contact_id, email = userMail, description = issue)
+        newIssue = Contact(user_id=contact_id,
+                           email=userMail, description=issue)
         db.session.add(newIssue)
         db.session.commit()
-        
+
         return redirect('/')
-    #pass int he form object to the html page. ON the html side everything is loaded using Jinja2
-    
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
+    # pass int he form object to the html page. ON the html side everything is loaded using Jinja2
+
     return render_template("contact.html", form=form)
 
 
@@ -230,7 +215,6 @@ def login():
         return redirect("/")
     return render_template("login.html")
 
-<<<<<<< HEAD
 
 @app.route('/account/<user_id>', methods=['GET'])
 def userAccount(user_id):
@@ -248,26 +232,6 @@ def userAccount(user_id):
     return render_template("account.html", userAccount=userAccount, comment_his=comment_his, post_his=post_his)
 
 
-=======
-@app.route('/account/<user_id>', methods =['GET'])
-def userAccount(user_id):
-    #check for username in our Users table
-    print(session['user']['user_id'])
-    if 'user' in session:
-        userId = session['user']['user_id']
-        userAccount = Users.query.get(userId)
-        print(userAccount)
-        #grab their comment and post history
-        comment_his = userAccount.comments
-        post_his = userAccount.posts
-        
-
-            #TODOadd checks for if user clicks (account settings), render settings page
-        return render_template("account.html", userAccount = userAccount, comment_his=comment_his, post_his=post_his)
-    return redirect("/")
-
-
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
 def is_allowed(filename):
     # cut the filename  at the .
     wordList = filename.split(".")
@@ -326,13 +290,8 @@ def get_post(post_id):
     comments = Comments.query.all()
     users = Users.query.all()
 
-<<<<<<< HEAD
     # NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
     return render_template("singlepost.html", post=post, us=session['user']['user_name'], comments=comments)
-=======
-    #NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post = post, us = session['user']['user_name'], comments = comments)
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
 
 
 @app.route('/post/<post_id>/edit')
@@ -362,15 +321,10 @@ def upadate_post(post_id):
 
     return redirect(f'/{post_id}')
 
-<<<<<<< HEAD
 # delete post and all comments related to the post
 
 
-@app.post('/posts/<post_id>/delete')
-=======
-#delete post and all comments related to the post
 @app.route('/posts/<post_id>/delete', methods=["POST"])
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
 def delete_post(post_id):
     # get the post comments
     post = Post.query.get(post_id)
@@ -392,75 +346,54 @@ def delete_post(post_id):
         abort(400)
 
 
-<<<<<<< HEAD
-@app.post('/comment')
-def createNewComment():
-=======
-
-
-
 @app.route('/comment/<comment_id>')
 def get_comment(comment_id):
-    #get all of the needed code.
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
+    # get all of the needed code.
     if 'user' in session:
         comment = Comments.query.get(comment_id)
         users = Users.query.all()
 
-<<<<<<< HEAD
-    if request.form['post'] == "comment":
-        comment = request.form.get("comment")
-        if comment == '':
-            abort(404)
-        # create the comment if there is one to create
-        newComment = Comments(user_id=int(
-            session['user']['user_id']), comment=comment, )
-        db.session.add(newComment)
-        db.session.commit()
-=======
-        return render_template("singleComment.html",us = session['user']['user_name'], comment = comment, ui =  session['user']['user_id'])
+        return render_template("singleComment.html", us=session['user']['user_name'], comment=comment, ui=session['user']['user_id'])
 
 
 @app.route('/comment/<comment_id>/edit')
 def edit_comment(comment_id):
     comment = Comments.query.get(comment_id)
     if session['user']['user_id'] == comment.user_id:
-        return render_template("editComment.html", comment = comment)
+        return render_template("editComment.html", comment=comment)
     else:
         abort(400)
 
 
 @app.post('/comment/<comment_id>')
 def upadate_comment(comment_id):
-    #get teh comment
+    # get teh comment
     updateComment = Comments.query.get(comment_id)
-    #get the new comment the person typed in
+    # get the new comment the person typed in
     comment = request.form.get('comment', '')
-    #if it is blank then leave it the same
+    # if it is blank then leave it the same
     if comment == '':
         comment = updateComment.comment
-    #update the comment
+    # update the comment
     updateComment.comment = comment
-    #commit the update
+    # commit the update
     db.session.commit()
     return redirect(f'/comment/{comment_id}')
 
+
 @app.route('/comment/<comment_id>/delete', methods=["POST"])
 def delete_comment(comment_id):
-    #get the comment
+    # get the comment
     comment = Comments.query.get(comment_id)
 # check if the user ownns teh comment
     if session['user']['user_id'] == comment.user_id:
-        
-        #make sure the user can delete the comment. If they can then comment the post
+
+        # make sure the user can delete the comment. If they can then comment the post
         db.session.delete(comment)
         db.session.commit()
         return redirect('/')
     else:
         abort(400)
-
-
->>>>>>> 6bc5e1a5b208286f54dcbaf8ee18024fd05873fb
 
 
 @app.get('/search-users')
