@@ -4,7 +4,7 @@ use picnetic_db;
 
 create table if not exists users (
 	user_id int not null auto_increment,
-    user_name varchar(255) not null,
+    user_name varchar(255) not null unique,
     email varchar(255) not null,
     f_name varchar(255) ,
     l_name varchar(255) ,
@@ -23,7 +23,7 @@ create table if not exists friend (
 );
 
 create table if not exists post (
-	user_name varchar(45) not null,
+	user_name varchar(255) not null unique,
     post_id int not null auto_increment,
     post_label enum('campus','sports',
     'stuorg','norm','alums','meme'),

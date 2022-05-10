@@ -1,0 +1,20 @@
+{% extends '_layout.html' %}
+
+{% block title %}Picnetic | Edit Comment{% endblock %}
+
+{% block body %}
+<style>
+  h1,form{
+    margin-left: 23.4375%;
+    margin-right: 23.4375%;
+  }
+</style>
+<h1>Edit Comment</h1>
+
+<form action="/comment/{{ comment.comment_id }}" method="post">
+    <input type = "text" style = "font-size: 20px; margin-top: 60px;" id = "comment" name = "comment" value = "{{ comment.comment }}">
+
+
+    <button type = "submit" style = "background-color: #005035; color:white; height: 100%; width: 100% ">Submit</button>
+</form>
+{% endblock %}

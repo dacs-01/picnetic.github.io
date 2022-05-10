@@ -1,6 +1,6 @@
 {% extends '_layout.html' %}
 
-{% block title %}Picnetic | Picnetic Home{% endblock %}
+{% block title %}Picnetic | Single Comment{% endblock %}
 
 {% block body %}
 <style>
@@ -35,55 +35,28 @@
         padding-left: 5px;
         text-align: left;
         font-size: 20px;
-    }
-    .addCom{
-        width: 85%;
-        height: 40px;
-        vertical-align: top;
-        
-    }
-    .submit{
-        background-color: #005035; 
-        color:white; 
-        height: 40px; 
-        width: 14%; 
-    }
-    .deleteForm{
-        padding-left: .5%;
-        padding-bottom: .5%;
-        display: inline;
-    }
+    }    
     .editLogo{
         width: 5%;
         display: inline;
         padding-bottom: .5%;
     }
-    .deleteLogo{
-        width: 3.5%;
-        display: inline;
-        padding-bottom: .75%;
-    }
-    .loadImg {
-        width: 100%;
-        height: auto;
-    }
+
 </style>
 <div id="container">
+    <h2>{{ us }}</h2>
     <div class = "content">
     
     <div style = "text-align: left; padding-left: 5px;">
-        <h2 class="header" id="change"> {{ post.post_label }}</h2>
+        <h2 class="header" id="change"> {{ comment.comment }}</h2>
     </div>
-    <img src = "{{ post.post_picture }}" class = "loadImg"> 
-    <p class = "para">{{ post.post_cap }}</p>
-    {% if post.user_name == us %}
-    <a href="/post/{{ post.post_id }}/edit">
+
+    {% if comment.user_id == ui %}
+   <a href="/comment/{{ comment.comment_id }}/edit">
         <img class="editLogo" src="/static/images/edit.png" alt="Edit logo">  
     </a>
-    <!-- <form class= "deleteForm" method = "post" action ="/posts/{{ post.post_id }}/delete">
-        
-    </form> -->
-    <form method = "post" action ="/posts/{{ post.post_id }}/delete">
+
+    <form method = "post" action ="/comment/{{ comment.comment_id }}/delete">
         <button type = "submit" >Delete</button>
     </form>
     {% endif %}
