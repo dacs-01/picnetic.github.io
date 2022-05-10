@@ -21,7 +21,7 @@ db = SQLAlchemy()
 class Users(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(255), nullable=False, unique=True)
+    user_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     passed = db.Column(LONGTEXT, nullable=False)
     f_name = db.Column(db.String(255), nullable= True)
@@ -59,7 +59,7 @@ class post_enum(enum.Enum):
 class Post(db.Model):
     __tablename__ = 'post'    
     post_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_name = db.Column(db.String(45), db.ForeignKey('users.user_name'), nullable=False, unique=True)
+    user_name = db.Column(db.String(45), db.ForeignKey('users.user_name'), nullable=False)
     post_label = db.Column(Enum(post_enum))
     post_cap = db.Column(db.String(255), nullable=True)
     post_picture = db.Column(db.String(255), nullable=False)
