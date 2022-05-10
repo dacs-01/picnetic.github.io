@@ -3,7 +3,7 @@
 {% block title %}Picnetic | Account{% endblock %}
 
 {% block body %}
-<div class="container" style="margin-left: 23.4375%; margin-right: 23.4375%;">
+<div class="container">
     <!--header and edit-->
     <div class="row">
         <div class="col-sm">
@@ -23,7 +23,7 @@
 
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
-                <table class="table table-bordered table-striped mb-0">
+                <table class="table table-dark table-bordered table-striped mb-0">
                     <tbody>
                         <tr>
                             {% for comments in comment_his %}
@@ -44,13 +44,13 @@
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
                 <h2>Post History</h2>
 
-                <table class="table table-bordered table-striped mb-0">
+                <table class="table table-dark table-bordered table-striped mb-0">
                     <tbody>
+                        {% for posts in post_his %}
                         <tr>
-                            {% for posts in post_his %}
-                            <td>{{ posts }}</td>
-                            {% endfor %}
+                            <td><a href = "/post/{{ posts.post_id }}">{{ posts }}</a></td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
