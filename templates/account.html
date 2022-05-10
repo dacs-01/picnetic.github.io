@@ -7,7 +7,11 @@
     <!--header and edit-->
     <div class="row">
         <div class="col-sm">
-            <h2> User Account</h2> <a href="/settings"><button type="button" class="btn btn-secondary float-right">Edit Account</button></a>
+            <h2> User Account</h2><a href="/delete/{{ ui }}" onclick="return confirm('Are you sure you want to delete your account?')" type="button" class="btn btn-secondary" id="deletebut">Delete Account
+            </a> <a href="/settings" type="button" class="btn btn-secondary" id="editbut">Edit
+                    Account
+            </a>
+
             <h3> {{ userAccount.user_name }}</h3>
         </div>
     </div>
@@ -53,7 +57,7 @@
 
         </div>
     </div>
-
+    
 
 </div>
 
