@@ -177,8 +177,26 @@ def SignUp():
     return render_template("create_account.html")
 
 
-@app.route('/settings', methods=['GET', 'POST'])
-def settings():
+@app.route('/settings/<user_id>', methods=['GET', 'POST'])
+def settings(user_id):
+    if 'user' in session:
+        userid = session['user']['user_id']
+        userAccount = Users.query.get(userid)
+        if request.method == 'POST':
+            password = request.form.get('password', '')
+            confirmPassword = request.form.get('confirmpassword', '')
+            email = request.form.get('emailAddress', '')
+        if password == '' or confirmPassword == '' or email == '':
+            abort(400)
+        if "@" not in email:
+            abort(400)
+        if(password != confirmPassword):
+            abort(400)
+
+        hashedPassword = bcrypt.generate_password_hash(
+            password).decode('utf-8')
+
+    # check for username in our Users table
     return render_template("settings.html")
 
 # route for login
