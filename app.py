@@ -63,7 +63,7 @@ load_dotenv()
 db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', '3306')
 db_user = os.getenv('DB_USER', 'root')
-db_pass = os.getenv('DB_PASSWORD')
+db_pass = os.getenv('DB_PASSWORD',)
 db_name = os.getenv('DB_NAME', 'picnetic_db')
 
 connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
@@ -229,7 +229,7 @@ def userAccount(user_id):
         if comment_his or post_his is None:
             return render_template("account2.html", userAccount=userAccount)
 
-    return render_template("account.html", userAccount=userAccount, comment_his=comment_his, post_his=post_his)
+    return render_template("account.html", userAccount=userAccount, comment_his=comment_his, post_his=post_his, ui = userid)
 
 
 def is_allowed(filename):
@@ -418,7 +418,7 @@ def not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/delete/<user_id>/', methods=['GET'])
+@app.route('/delete/<user_id>', methods=['GET'])
 def delete(user_id):
     if 'user' in session:
         userid = session['user']['user_id']
@@ -427,13 +427,9 @@ def delete(user_id):
         # delete users comments
         comment_his = userAccount.comments
         db.session.delete(comment_his)
-        db.session.commit()
-
         # delete users posts
         post_his = userAccount.posts
-        db.session.delete(post_his)
-        db.session.commit()
-
+        db.session.delete(post_his)     
         # finally, delete the user's account
         db.session.delete(userAccount)
         db.session.commit()
