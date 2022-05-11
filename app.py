@@ -60,15 +60,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 # This is the dotenv connection string for our database
 load_dotenv()
 
-db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('DB_PORT', '3306')
-db_user = os.getenv('DB_USER', 'root')
-db_pass = os.getenv('DB_PASSWORD',)
-db_name = os.getenv('DB_NAME', 'picnetic_db')
-
-connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('CLEARDB_DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
