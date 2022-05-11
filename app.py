@@ -219,14 +219,12 @@ def login():
 
 @app.route('/account/<user_id>', methods=['GET'])
 def userAccount(user_id):
-    print(session['user']['user_id'])
     if 'user' in session:
         userid = session['user']['user_id']
     # check for username in our Users table
         userAccount = Users.query.get(userid)
         comment_his = userAccount.comments
         post_his = userAccount.posts
-        print(userAccount)
         if comment_his and post_his is None:
             return render_template("account2.html", userAccount=userAccount)
 
@@ -419,7 +417,7 @@ def not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/delete/<user_id>', methods=['POST', 'GET'])
+@app.route('/delete/<user_id>', methods=['POST'])
 def delete(user_id):
     if 'user' in session:
         userid = session['user']['user_id']
