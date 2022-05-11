@@ -27,7 +27,7 @@
                     <tbody>
                         <tr>
                             {% for comments in comment_his %}
-                            <td>{{ comments }}</td>
+                            <td>{{ comments.comment }}</td>
                             {% endfor %}
                         </tr>
                     </tbody>
@@ -48,7 +48,7 @@
                     <tbody>
                         {% for posts in post_his %}
                         <tr>
-                            <td><a href = "/post/{{ posts.post_id }}">{{ posts }}</a></td>
+                            <td><a href = "/{{ posts.post_id }}">{{ posts }}</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
