@@ -59,11 +59,10 @@ class post_enum(enum.Enum):
 class Post(db.Model):
     __tablename__ = 'post'    
     post_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    user_name = db.Column(db.String(45), db.ForeignKey('users.user_name'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     post_label = db.Column(Enum(post_enum))
     post_cap = db.Column(db.String(255), nullable=True)
     post_picture = db.Column(db.String(255), nullable=False)
-    #picture_file_name = db.Column(db.Text, nullable=False)
 
 #I used this webstie to help with the date attribute
 # https://stackoverflow.com/questions/13370317/sqlalchemy-default-datetime

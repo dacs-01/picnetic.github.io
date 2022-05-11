@@ -61,15 +61,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 # This is the dotenv connection string for our database
 load_dotenv()
 
-db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('DB_PORT', '3306')
-db_user = os.getenv('DB_USER', 'root')
-db_pass = os.getenv('DB_PASSWORD',)
-db_name = os.getenv('DB_NAME', 'picnetic_db')
-
-connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('CLEARDB_DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -131,8 +123,7 @@ def contact():
         contact_id = session['user']['user_id']
         userMail = Users.query.get(contact_id)
 
-        newIssue = Contact(user_id=contact_id,
-                           email=userMail, description=issue)
+        newIssue = Contact(user_id=contact_id, email=userMail, description=issue)
         db.session.add(newIssue)
         db.session.commit()
 
@@ -287,7 +278,7 @@ def CreatePost():
             print(label)
             cap = request.form.get('caption')
             imageURL = str(imageURL)
-            post = Post(user_name=session['user']['user_name'], post_label=label,
+            post = Post(user_id=session['user']['user_id'], post_label=label,
                         post_cap=cap, post_picture=imageURL)  # Add Username
             db.session.add(post)
             db.session.commit()
@@ -312,13 +303,13 @@ def get_post(post_id):
     users = Users.query.all()
 
     # NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post=post, us=session['user']['user_name'], comments=comments)
+    return render_template("singlepost.html", post=post, us=session['user']['user_id'], comments=comments)
 
 
 @app.route('/post/<post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
-    if session['user']['user_name'] == post.user_name:
+    if session['user']['user_id'] == post.user_id:
         return render_template("edit.html", post=post)
     else:
         abort(400)
@@ -350,7 +341,7 @@ def delete_post(post_id):
     # get the post comments
     post = Post.query.get(post_id)
 
-    if session['user']['user_name'] == post.user_name:
+    if session['user']['user_id'] == post.user_id:
 
         comments = Comments.query.all()
         # make sure the comment relates to the post being deleted and delete them

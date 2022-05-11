@@ -23,14 +23,14 @@ create table if not exists friend (
 );
 
 create table if not exists post (
-	user_name varchar(255) not null,
+	user_id int not null,
     post_id int not null auto_increment,
     post_label enum('campus','sports',
     'stuorg','norm','alums','meme'),
     post_cap varchar(255) default null,
     post_picture varchar(255) not null,
     primary key (post_id),
-    foreign key (user_name) references users (user_name)
+    foreign key (user_id) references users (user_id)
 );
 
 create table if not exists comments (
