@@ -3,21 +3,12 @@
 {% block title %}Picnetic | Account Settings{% endblock %}
 
 {% block body %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Account Settings</title>
-</head>
-<body>
 
-    <div id="account_management">
+
         <h2> Account Management </h2> <br>
         <br>
 
-        <form>
+        <form method = "POST">
 
         <label for="email"> Email </label> <br>
         <input type="email" id="email" name="email" required placeholder="Enter New Email Address Here."> <br>
@@ -26,14 +17,6 @@
         <input type="password" id="confirmpassword" name="confirmpassword" required placeholder="Confirm New Password."> <br>
         <button onclick="return confirm('All changes will not be saved, are you sure you want to leave this page?')" action="/account/{{ ui }}" type="submit" class="btn btn-secondary"value="Reset">Reset Changes</button>   
         </form>
-    </div>
 
-    <div id="deactivation">
-    <form method="post" action="/account/{{ ui }}">
-        <button type="submit" value="Save" class="btn btn-secondary">Save Changes</button>
-    </form>
-    </div>
-</body>
-</html>
 
 {% endblock %}

@@ -178,19 +178,19 @@ def settings(user_id):
             password = request.form.get('password', '')
             confirmPassword = request.form.get('confirmpassword', '')
             email = request.form.get('emailAddress', '')
-        if password == '' or confirmPassword == '' or email == '':
-            abort(400)
-        if "@" not in email:
-            abort(400)
-        if(password != confirmPassword):
-            abort(400)
+            if password == '' or confirmPassword == '' or email == '':
+                abort(400)
+            if "@" not in email:
+                abort(400)
+            if(password != confirmPassword):
+                abort(400)
 
-        hashedPassword = bcrypt.generate_password_hash(
-            password).decode('utf-8')
-
-        newSettings = Users(user_id=userid, email=email, password=hashedPassword)
-        db.session.add(newSettings)
-        db.session.commit()
+            hashedPassword = bcrypt.generate_password_hash(password).decode('utf-8')
+            print(password)
+            newSettings = Users(user_id=userid, email=email, password=hashedPassword)
+            db.session.add(newSettings)
+            db.session.commit()
+            return render_template("settings.html")
 
     return render_template("settings.html",  ui = session['user']['user_id'] )
 
