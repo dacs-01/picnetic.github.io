@@ -12,27 +12,6 @@
     <title>User Account Settings</title>
 </head>
 <body>
-    <div id="publicprofile">
-        <h2> Public Profile </h2> <br>
-        <p> Other users who view your account would see this information. </p> <br>
-        <br>
-
-        <form>
-        <label for="display_name"> Display Name: </label> <br>
-        <input type="text" id="display_name" name="display_name"> <br>
-        <label for="birthday"> Birthday: </label> <br>
-        <input type="text" id="birthday" name="birthday"> <br>
-
-        <br>
-
-        <label for="bio"> Bio: </label> <br>
-        <input type="text" id="bio" name="bio"> <br>
-        <label for="pronouns"> Pronouns </label> <br>
-        <input type="text" id="pronouns" name="pronouns"> <br>
-
-        <br>
-        </form>
-    </div>
 
     <div id="account_management">
         <h2> Account Management </h2> <br>
@@ -41,17 +20,18 @@
         <form>
 
         <label for="email"> Email </label> <br>
-        <input type="email" id="email" name="email"> <br>
+        <input type="email" id="email" name="email" required placeholder="Enter New Email Address Here."> <br>
         <label for="password"> Password </label> <br>
-        <input type="password" id="password" name="password"> <br>
-        <input type="submit" value="Change">
+        <input type="password" id="password" name="password" required placeholder="Enter New Password Here."> <br>
+        <input type="password" id="confirmpassword" name="confirmpassword" required placeholder="Confirm New Password."> <br>
+        <button type="submit" value="Change"> </button>
         </form>
     </div>
 
     <div id="deactivation">
     <form>
-        <input type="submit" value="Reset">
-        <input type="submit" value="Save">
+        <button type="submit" value="Reset"> </button>
+        <button type="submit" value="Save"> </button>
     </form>
     </div>
 </body>
