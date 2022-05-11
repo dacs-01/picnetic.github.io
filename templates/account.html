@@ -7,8 +7,8 @@
     <!--header and edit-->
     <div class="row">
         <div class="col-sm">
-            <h2> User Account</h2><a href="/delete/{{ ui }}" onclick="return confirm('Are you sure you want to delete your account?')" type="button" class="btn btn-secondary" id="deletebut">Delete Account
-            </a> <a href="/settings" type="button" class="btn btn-secondary" id="editbut">Edit
+            <h2> Hello, </h2><form method = "post" action = "/delete/{{ ui }}"> <button onclick="return confirm('Are you sure you want to delete your account?')" type="submit" class="btn btn-secondary" id="deletebut">Delete Account
+            </button></form> <a href="/settings" type="button" class="btn btn-secondary" id="editbut">Edit
                     Account
             </a>
 

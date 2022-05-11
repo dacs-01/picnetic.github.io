@@ -78,7 +78,7 @@
     </div>
     <img src = "{{ post.post_picture }}" class = "loadImg"> 
     <p class = "para">{{ post.post_cap }}</p>
-    {% if post.user_name == us %}
+    {% if post.user_id == ui %}
     <a href="/post/{{ post.post_id }}/edit">
         <img class="editLogo" src="/static/images/edit.png" alt="Edit logo">  
     </a>

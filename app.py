@@ -7,6 +7,7 @@
 #           | |
 #           |_|
 import os
+from re import I
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, abort, url_for, session, url_for, flash, send_from_directory
 from sqlalchemy import null
@@ -60,15 +61,7 @@ app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 # This is the dotenv connection string for our database
 load_dotenv()
 
-db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('DB_PORT', '3306')
-db_user = os.getenv('DB_USER', 'root')
-db_pass = os.getenv('DB_PASSWORD',)
-db_name = os.getenv('DB_NAME', 'picnetic_db')
-
-connection_string = f'mysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('CLEARDB_DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -130,8 +123,7 @@ def contact():
         contact_id = session['user']['user_id']
         userMail = Users.query.get(contact_id)
 
-        newIssue = Contact(user_id=contact_id,
-                           email=userMail, description=issue)
+        newIssue = Contact(user_id=contact_id, email=userMail, description=issue)
         db.session.add(newIssue)
         db.session.commit()
 
@@ -240,18 +232,17 @@ def login():
 
 @app.route('/account/<user_id>', methods=['GET'])
 def userAccount(user_id):
-    print(session['user']['user_id'])
     if 'user' in session:
         userid = session['user']['user_id']
     # check for username in our Users table
         userAccount = Users.query.get(userid)
         comment_his = userAccount.comments
         post_his = userAccount.posts
-        print(userAccount)
+
         if comment_his and post_his is None:
             return render_template("account2.html", userAccount=userAccount)
 
-    return render_template("account.html", userAccount=userAccount, comment_his=comment_his, post_his=post_his, ui = userid)
+    return render_template("account.html", userAccount=userAccount, comment_his=comment_his, post_his=post_his, ui = session['user']['user_id'])
 
 
 def is_allowed(filename):
@@ -288,7 +279,10 @@ def CreatePost():
             print(label)
             cap = request.form.get('caption')
             imageURL = str(imageURL)
-            post = Post(user_name=session['user']['user_name'], post_label=label, post_cap=cap, post_picture=imageURL)  # Add Username
+
+            post = Post(user_id=session['user']['user_id'], post_label=label,
+                        post_cap=cap, post_picture=imageURL)  # Add Username
+
             db.session.add(post)
             db.session.commit()
 
@@ -313,13 +307,13 @@ def get_post(post_id):
 
 
     # NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
-    return render_template("singlepost.html", post=post, us=session['user']['user_name'], comments=comments)
+    return render_template("singlepost.html", post=post, us=session['user']['user_id'], comments=comments)
 
 
 @app.route('/post/<post_id>/edit')
 def edit_post(post_id):
     post = Post.query.get(post_id)
-    if session['user']['user_name'] == post.user_name:
+    if session['user']['user_id'] == post.user_id:
         return render_template("edit.html", post=post)
     else:
         abort(400)
@@ -351,7 +345,7 @@ def delete_post(post_id):
     # get the post comments
     post = Post.query.get(post_id)
 
-    if session['user']['user_name'] == post.user_name:
+    if session['user']['user_id'] == post.user_id:
 
         comments = Comments.query.all()
         # make sure the comment relates to the post being deleted and delete them
@@ -440,25 +434,24 @@ def not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/delete/<user_id>', methods=['GET'])
+@app.route('/delete/<user_id>', methods=['POST'])
 def delete(user_id):
     if 'user' in session:
         userid = session['user']['user_id']
         userAccount = Users.query.get(userid)
-
-        # delete users comments
-        comment_his = userAccount.comments
-        db.session.delete(comment_his)
-        # delete users posts
-        post_his = userAccount.posts
-        db.session.delete(post_his)     
-        # finally, delete the user's account
-        db.session.delete(userAccount)
-        db.session.commit()
-
-        flash("Your account has been deleted!")
-
-        return redirect(url_for('index'))
+        if request.method == 'POST':
+            # delete users comments
+            comment_his = userAccount.comments
+            for c in comment_his:
+                db.session.delete(c)
+            # delete users posts
+            post_his = userAccount.posts
+            for p in post_his:
+                db.session.delete(p)    
+            # finally, delete the user's account
+            db.session.delete(userAccount)
+            db.session.commit()
+    return render_template('deletedAccount.html')
 
 
 if __name__ == '__main__':
