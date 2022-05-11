@@ -421,7 +421,7 @@ def search_users():
     if q != '':
         found_users = users_repository_singleton.search_users(q)
     # return a template with the list of users found
-    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q, ui = session['users']['user_id'])
+    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
 
 
 @app.errorhandler(400)
