@@ -10,6 +10,7 @@ db = SQLAlchemy()
 #I used these websties to help me with all of the foreign keys/relationships:
 # https://docs.sqlalchemy.org/en/14/orm/basic_relationships.html
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
+#https://michaelcho.me/article/using-python-enums-in-sqlalchemy-models
 
 #This is to represent the many to many relationship between users and friend (must be made before each entity table)
 #friends = db.Table('friends',
@@ -18,6 +19,24 @@ db = SQLAlchemy()
 #)
 
 #This is the begining of each entity in our database
+
+class Enum(db.TypeDecorator):
+     #passes in a python enum and stores the value in the db. Used this because before we were just getting post_enum.name instead of just name. 
+    impl = db.String
+    #
+    def __init__(self, enumtype, *args, **kwargs):
+            super(Enum, self).__init__(*args, **kwargs)
+            self._enumtype = enumtype
+
+    def process_bind_param(self, value, dialect):
+        #check if it is an instance of the enum table and if it is then just return the value
+        if isinstance(value, int):
+            return value
+
+        return value.value
+
+
+
 class Users(db.Model):
     __tablename__ = 'users'
     user_id = db.Column(db.Integer, primary_key=True)
@@ -51,7 +70,7 @@ class Comments(db.Model):
 class post_enum(enum.Enum):
     campus = 'campus'
     sports = 'sports'
-    stuorg = 'student org'
+    studentOrg = 'student org'
     norm = 'norm'
     alums = 'alums'
     meme = 'meme'
@@ -59,8 +78,11 @@ class post_enum(enum.Enum):
 class Post(db.Model):
     __tablename__ = 'post'    
     post_id = db.Column(db.Integer, primary_key=True, nullable=False)
+
+    post_label = db.Column(db.String(255), nullable=True)
+
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    post_label = db.Column(Enum(post_enum))
+
     post_cap = db.Column(db.String(255), nullable=True)
     post_picture = db.Column(db.String(255), nullable=False)
 
@@ -73,5 +95,3 @@ class Contact(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     email = db.Column(db.String(45), nullable=False)
     description = db.Column(db.String(255), nullable=True)
-
-

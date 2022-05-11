@@ -238,6 +238,7 @@ def userAccount(user_id):
         userAccount = Users.query.get(userid)
         comment_his = userAccount.comments
         post_his = userAccount.posts
+
         if comment_his and post_his is None:
             return render_template("account2.html", userAccount=userAccount)
 
@@ -278,8 +279,10 @@ def CreatePost():
             print(label)
             cap = request.form.get('caption')
             imageURL = str(imageURL)
+
             post = Post(user_id=session['user']['user_id'], post_label=label,
                         post_cap=cap, post_picture=imageURL)  # Add Username
+
             db.session.add(post)
             db.session.commit()
 
@@ -301,6 +304,7 @@ def get_post(post_id):
     post = Post.query.get_or_404(post_id)
     comments = Comments.query.all()
     users = Users.query.all()
+
 
     # NEED TO ADD WAY TO COMMENT HERE AND THEN DO THE BUTTON TO EDIT/DELETE POST AS WELL. NOT 100% but can be soon. WAnt to finish my current page
     return render_template("singlepost.html", post=post, us=session['user']['user_id'], comments=comments)
