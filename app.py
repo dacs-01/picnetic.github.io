@@ -196,6 +196,10 @@ def settings(user_id):
         hashedPassword = bcrypt.generate_password_hash(
             password).decode('utf-8')
 
+        newSettings = Users(user_id=userid, email=email, password=hashedPassword)
+        db.session.add(newSettings)
+        db.session.commit()
+
     # check for username in our Users table
     return render_template("settings.html")
 
