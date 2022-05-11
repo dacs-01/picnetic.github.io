@@ -177,7 +177,7 @@ def settings(user_id):
         if request.method == 'POST':
             password = request.form.get('password', '')
             confirmPassword = request.form.get('confirmpassword', '')
-            email = request.form.get('emailAddress', '')
+            email = request.form.get('email', '')
             if password == '' or confirmPassword == '' or email == '':
                 abort(400)
             if "@" not in email:
@@ -186,9 +186,10 @@ def settings(user_id):
                 abort(400)
 
             hashedPassword = bcrypt.generate_password_hash(password).decode('utf-8')
-            print(password)
-            newSettings = Users(user_id=userid, email=email, password=hashedPassword)
-            db.session.add(newSettings)
+            
+            userAccount.passed = password
+            userAccount.email = email
+
             db.session.commit()
             return render_template("settings.html")
 
@@ -420,7 +421,7 @@ def search_users():
     if q != '':
         found_users = users_repository_singleton.search_users(q)
     # return a template with the list of users found
-    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
+    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q, ui = session['users']['user_id'])
 
 
 @app.errorhandler(400)
@@ -451,6 +452,14 @@ def delete(user_id):
             db.session.delete(userAccount)
             db.session.commit()
     return render_template('deletedAccount.html')
+#logout
+@app.post('/logout')
+def logout():
+    #make sure user is in session log them out
+    if 'user'  in session:
+        del session['user']
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

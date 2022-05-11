@@ -11,7 +11,9 @@
             </button></form> <a href="/settings/{{ ui }}" type="button" class="btn btn-secondary" id="editbut">Edit
                     Account
             </a>
-
+            <form method = 'post' action="/logout">
+                <button>Logout</button>
+            </form>
             <h3> {{ userAccount.user_name }}</h3>
         </div>
     </div>
@@ -48,7 +50,7 @@
                     <tbody>
                         {% for posts in post_his %}
                         <tr>
-                            <td><a href = "/{{ posts.post_id }}">{{ posts }}</a></td>
+                            <td><a href = "/{{ posts.post_id }}">{{ posts.post_cap }}</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
