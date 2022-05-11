@@ -172,26 +172,26 @@ def SignUp():
 @app.route('/settings/<user_id>', methods=['GET', 'POST'])
 def settings(user_id):
     if 'user' in session:
-        userid = session['user']['user_id']
-        userAccount = Users.query.get(userid)
-        if request.method == 'POST':
-            password = request.form.get('password', '')
-            confirmPassword = request.form.get('confirmpassword', '')
-            email = request.form.get('email', '')
-            if password == '' or confirmPassword == '' or email == '':
-                abort(400)
-            if "@" not in email:
-                abort(400)
-            if(password != confirmPassword):
-                abort(400)
 
-            hashedPassword = bcrypt.generate_password_hash(password).decode('utf-8')
+        userAccount = Users.query.get(user_id)
+        fname = request.form.get('fname','')
+        lname = request.form.get('lname','')
+        email = request.form.get('email', '')
+
+        if email == '':
+            email = userAccount.email
+        if fname == '':
+            fname = userAccount.f_name
+        if lname == '':
+            lname = userAccount.l_name
             
-            userAccount.passed = password
-            userAccount.email = email
+        userAccount.f_name = fname
+        userAccount.l_name = lname
+        userAccount.email = email
 
-            db.session.commit()
-            return render_template("settings.html")
+        db.session.commit()
+        return render_template("settings.html")
+
 
     return render_template("settings.html",  ui = session['user']['user_id'] )
 
@@ -320,7 +320,7 @@ def edit_post(post_id):
 
 
 @app.post('/<post_id>')
-def upadate_post(post_id):
+def update_post(post_id):
     updatePost = Post.query.get(post_id)
     type = request.form.get('post-label', '')
     caption = request.form.get('caption', '')
