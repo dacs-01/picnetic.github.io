@@ -1,11 +1,9 @@
-from src.models import Users, Post
+# def test_comments(test_app):
+#     res = test_app.get('/comment/<comment_id>')
 
-def test_homepage(test_app):
-    res = test_app.get('/index')
+#     res = test_app.post('/comment/<comment_id>', data={
+#             'comment': "Nice Picture!"
+#         }, follow_redirects=True)
 
-    res = test_app.post('/index', data={
-            'post_picture': "TESTURL",
-        }, follow_redirects=True)
-
-    assert res.status_code == 200
-    assert b'TESTURL' in res.data
+#     assert res.status_code == 200
+#     assert b'Nice Picture!' in res.data
