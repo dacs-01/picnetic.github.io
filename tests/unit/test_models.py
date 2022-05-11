@@ -11,17 +11,17 @@ def test_user_model():
 
 def test_post_model():
     newUser = Users(user_id = 5, user_name = "Test", passed = "123", email = "test@gmail.com")
-    newPost = Post(post_id = 3, user_name = newUser.user_name, post_label = "sports", post_cap = "Football Team", post_picture = "TESTURL")
+    newPost = Post(post_id = 3, user_id = newUser.user_id, post_label = "sports", post_cap = "Football Team", post_picture = "TESTURL")
 
     assert newPost.post_id == 3
-    assert newPost.user_name == "Test"
+    assert newPost.user_id == 5
     assert newPost.post_label == "sports"
     assert newPost.post_cap == "Football Team"
     assert newPost.post_picture == "TESTURL"
 
 def test_comment_model():
     newUser = Users(user_id = 5, user_name = "Test", passed = "123", email = "test@gmail.com")
-    newPost = Post(post_id = 3, user_name = newUser.user_name, post_label = "sports", post_cap = "Football Team", post_picture = "TESTURL")
+    newPost = Post(post_id = 3, user_id = newUser.user_id, post_label = "sports", post_cap = "Football Team", post_picture = "TESTURL")
     comments = Comments(comment_id = 1, user_id = newUser.user_id, comment = "Nice Picture!", post_id = newPost.post_id)
 
     assert comments.comment_id == 1
