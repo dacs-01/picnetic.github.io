@@ -188,7 +188,7 @@ def settings(user_id):
         hashedPassword = bcrypt.generate_password_hash(
             password).decode('utf-8')
 
-        newSettings = Users(user_id=userid, email=email, password=hashedPassword)
+        newSettings = Users(user_id=userid, email=email, password=hashedPassword, ui = session['user']['user_id'] )
         db.session.add(newSettings)
         db.session.commit()
 
