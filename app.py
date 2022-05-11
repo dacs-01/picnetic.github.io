@@ -172,6 +172,7 @@ def SignUp():
 @app.route('/settings/<user_id>', methods=['GET', 'POST'])
 def settings(user_id):
     if 'user' in session:
+
         userAccount = Users.query.get(user_id)
         fname = request.form.get('fname','')
         lname = request.form.get('lname','')
@@ -190,6 +191,7 @@ def settings(user_id):
 
         db.session.commit()
         return render_template("settings.html")
+
 
     return render_template("settings.html",  ui = session['user']['user_id'] )
 
@@ -419,7 +421,7 @@ def search_users():
     if q != '':
         found_users = users_repository_singleton.search_users(q)
     # return a template with the list of users found
-    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q)
+    return render_template('user_search.html', search_active=True, userlist=found_users, search_query=q, ui = session['users']['user_id'])
 
 
 @app.errorhandler(400)
@@ -450,6 +452,14 @@ def delete(user_id):
             db.session.delete(userAccount)
             db.session.commit()
     return render_template('deletedAccount.html')
+#logout
+@app.post('/logout')
+def logout():
+    #make sure user is in session log them out
+    if 'user'  in session:
+        del session['user']
+
+    return redirect('/')
 
 
 if __name__ == '__main__':
