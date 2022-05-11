@@ -192,8 +192,7 @@ def settings(user_id):
         db.session.add(newSettings)
         db.session.commit()
 
-    # check for username in our Users table
-    return render_template("settings.html")
+    return render_template("settings.html",  ui = session['user']['user_id'] )
 
 # route for login
 

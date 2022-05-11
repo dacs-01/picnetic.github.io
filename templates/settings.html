@@ -24,14 +24,13 @@
         <label for="password"> Password </label> <br>
         <input type="password" id="password" name="password" required placeholder="Enter New Password Here."> <br>
         <input type="password" id="confirmpassword" name="confirmpassword" required placeholder="Confirm New Password."> <br>
-        <button type="submit" value="Change"> </button>
+        <button onclick="return confirm('All changes will not be saved, are you sure you want to leave this page?')" action="/account/{{ ui }}" type="submit" class="btn btn-secondary"value="Reset">Reset Changes</button>   
         </form>
     </div>
 
     <div id="deactivation">
-    <form>
-        <button type="submit" value="Reset"> </button>
-        <button type="submit" value="Save"> </button>
+    <form method="post" action="/account/{{ ui }}">
+        <button type="submit" value="Save" class="btn btn-secondary">Save Changes</button>
     </form>
     </div>
 </body>
