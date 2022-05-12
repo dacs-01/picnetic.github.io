@@ -4,21 +4,22 @@
 
 {% block body %}
 
-
+<div style="margin-left: 23.4375%; margin-right: 23.4375%;">
         <h2> Account Management </h2> <br>
         <br>
 
-        <form method = "POST">
+        <form method="POST" class="container center">
 
-        <label for="email"> Email </label> <br>
-        <input type="email" id="email" name="email" required placeholder="Enter New Email Address Here."> <br>
+                <label for="email"> Email </label> <br>
+                <input type="email" id="email" name="email" required placeholder="Enter New Email Address Here."> <br>
 
-        <label for="name"> Name: </label> <br>
-        <input type="text" id="fname" name="password" required placeholder="First Name"> <br>
-        <input type="text" id="lname" name="confirmpassword" required placeholder="Last Name"> <br>
-        <button type="submit" class="btn btn-secondary"value="Reset">Reset Changes</button>   
+                <label for="name"> Name: </label> <br>
+                <input type="text" id="fname" name="password" required placeholder="First Name"> <br>
+                <input type="text" id="lname" name="confirmpassword" required placeholder="Last Name"> <br>
+                <button type="submit" class="btn btn-secondary" value="Reset">Reset Changes</button>
 
         </form>
+</div>
 
 
 {% endblock %}
